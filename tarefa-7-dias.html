@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercício 7 Dias | Michelly Santos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bloco-dia { 
+            background: white; padding: 25px; border-radius: 15px; 
+            margin-bottom: 20px; border-left: 6px solid #d4a373; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: none; 
+        }
+        .titulo-dia { color: #d4a373; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; display: block; }
+        .instrucao { font-size: 0.85rem; color: #85741d; margin-bottom: 15px; font-style: italic; display: block; }
+        label { display: block; margin-bottom: 8px; color: #444; font-size: 0.95rem; font-weight: 500; }
+        textarea { 
+            width: 100%; border: 1px solid #e0e0e0; border-radius: 10px; 
+            padding: 12px; font-family: inherit; margin-bottom: 15px; 
+            resize: vertical; box-sizing: border-box; 
+        }
+        textarea:disabled { background: #f9f9f9; color: #777; cursor: not-allowed; }
+        .btn-enviar { 
+            background: #7b8f80; color: white; border: none; padding: 15px; 
+            border-radius: 10px; font-weight: bold; cursor: pointer; 
+            width: 100%; font-size: 1rem; transition: 0.3s; 
+        }
+        .btn-enviar:hover:not(:disabled) { background: #6a7c6e; transform: translateY(-2px); }
+        .btn-enviar:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .status-header { 
+            background: #fdfaf5; padding: 20px; border-radius: 12px; 
+            text-align: center; margin-bottom: 30px; border: 1px solid #e9e0d2;
+        }
+
+        /* AJUSTE DE ESPAÇAMENTO DO PROGRESSO */
+        #progresso-texto { 
+            margin-top: 25px; 
+            font-weight: bold; 
+            color: #d4a373; 
+            display: block; 
+        }
+    </style>
+</head>
+<body style="background-color: #fcfbf9; padding: 20px; font-family: sans-serif;">
+
+    <div style="max-width: 700px; margin: 40px auto;">
+        <div class="status-header">
+            <h2 style="margin:0; color: #4a4a4a;">7 Dias de Escuta e Ressignificação</h2>
+            <p id="progresso-texto">Verificando progresso...</p>
+        </div>
+
+        <div id="container-exercicios">
+            <div class="bloco-dia" id="bloco-1">
+                <span class="titulo-dia">Dia 1 - Nomeando a falta</span>
+                <span class="instrucao">Escreva sobre momentos em que a ausência do seu pai mais doeu.</span>
+                <label>Do que eu senti falta? Em quais momentos eu mais precisei e não tive?</label>
+                <textarea id="dia-1" rows="4" placeholder="Sua resposta..."></textarea>
+                <button onclick="salvarDia(1)" id="btn-1" class="btn-enviar">Salvar Resposta do Dia 1</button>
+            </div>
+
+            <div class="bloco-dia" id="bloco-2">
+                <span class="titulo-dia">Dia 2 - A voz da criança</span>
+                <span class="instrucao">Escreva como se fosse a criança que você foi.</span>
+                <label>"Pai, quando você não estava, eu sentia..."</label>
+                <textarea id="dia-2-sentia" rows="3"></textarea>
+                <label>"O que eu mais queria que você tivesse me dado era..."</label>
+                <textarea id="dia-2-queria" rows="3"></textarea>
+                <button onclick="salvarDia(2)" id="btn-2" class="btn-enviar">Salvar Resposta do Dia 2</button>
+            </div>
+
+            <div class="bloco-dia" id="bloco-3">
+                <span class="titulo-dia">Dias 3 e 4 - Marcas e o Não Dito</span>
+                <label>O que essa ausência me ensinou sobre mim? E o que eu nunca consegui te dizer?</label>
+                <textarea id="dia-3" rows="5" placeholder="Reflita sobre seus relacionamentos hoje..."></textarea>
+                <button onclick="salvarDia(3)" id="btn-3" class="btn-enviar">Salvar Resposta Dias 3 e 4</button>
+            </div>
+
+            <div class="bloco-dia" id="bloco-5">
+                <span class="titulo-dia">Dias 5 e 6 - Separando Histórias</span>
+                <label>O que foi dele e o que eu carreguei sem precisar? O que a menina que eu fui precisava ouvir?</label>
+                <textarea id="dia-5" rows="5"></textarea>
+                <button onclick="salvarDia(5)" id="btn-5" class="btn-enviar">Salvar Resposta Dias 5 e 6</button>
+            </div>
+
+            <div class="bloco-dia" id="bloco-7" style="border-left-color: #7b8f80;">
+                <span class="titulo-dia" style="color: #7b8f80;">Dia 7 - Ressignificação</span>
+                <label>Escreva sua frase de escolha para o presente:</label>
+                <textarea id="dia-7" rows="3" placeholder="Ex: A ausência que vivi não define o meu valor."></textarea>
+                <button onclick="salvarDia(7)" id="btn-7" class="btn-enviar">Finalizar Jornada</button>
+            </div>
+        </div>
+        <li><a href="index.html">Voltar</a></li>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>

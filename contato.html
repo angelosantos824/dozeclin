@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Sessão | Michelly Santos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="nome"> Michelly Santos</span>
+                <span class="subtitulo">......Psicanalista Clínica</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <!-- ID "openLogin" para o script reconhecer -->
+                <li><a href="#" class="link-login" id="openLogin">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contato-secao" id="contato">
+        <div class="contato-grid">
+            <div class="contato-form">
+                <h2>Solicitar Atendimento</h2>
+                <p style="margin-bottom: 30px; color: #888;">Preencha os dados abaixo e entrarei em contato em breve.</p>
+                
+                <form id="formPedido" onsubmit="enviarWhatsApp(event)">
+                    <div class="form-group-contato">
+                        <label>Seu Nome Completo</label>
+                        <input type="text" id="nomeCliente" placeholder="Ex: Maria Silva" required> 
+                    </div>
+
+                    <div class="form-group-contato">
+                        <label>E-mail de Contato</label>
+                        <input type="email" id="emailCliente" placeholder="email@exemplo.com" required> 
+                    </div>
+
+                    <div class="form-group-contato">
+                        <label>Qual o seu interesse?</label>
+                        <select id="interesseCliente"> 
+                            <option value="Sessão Avulsa (50 €)">Sessão Avulsa (50 €)</option>
+                            <option value="Pacote Mensal (180 €)">Pacote Mensal (180 €)</option>
+                            <option value="Foco Total (350 €)">Foco Total (350 €)</option>
+                            <option value="Outras dúvidas">Outras dúvidas</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-contato">
+                        <label>Mensagem (Opcional)</label>
+                        <textarea id="mensagemCliente" rows="4" placeholder="Conte um pouco sobre sua busca..."></textarea> 
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; padding: 15px;">Enviar Solicitação</button>
+                </form>
+            </div>
+
+            <div class="contato-info">
+                <div class="contato-metodo">
+                    <div>
+                        <h4>Atendimento Online</h4>
+                        <p>Sessões via Zoom ou Google Meet para toda a Europa e Brasil.</p>
+                    </div>
+                </div>
+
+                <div class="contato-metodo">
+                    <div>
+                        <h4>E-mail Profissional</h4>
+                        <p>contato@michellysantospsi.com</p>
+                    </div>
+                </div>
+
+                <hr style="opacity: 0.2; margin: 20px 0;">
+
+                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 10px;">Prefere falar agora?</p>
+                <a href="https://wa.me/351910377246" target="_blank" class="btn-whatsapp-direto">
+                    Enviar Mensagem no WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       RODAPÉ
+  ========================================================== -->
+ <footer class="footer-premium">
+
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- BRAND -->
+
+    <div class="footer-box footer-brand">
+
+      <div class="footer-logo">
+        <img src="imagem/favicon-96x96.png" alt="Michelly Santos">
+      </div>
+
+      <h3>Michelly Eufrazio Santos</h3>
+
+      <p>
+        Psicanalista Clínica especializada em acolhimento emocional,
+        autoconhecimento e desenvolvimento pessoal.
+      </p>
+
+      <!-- REDES -->
+
+      <div class="redes-sociais">
+
+        <!-- LINKEDIN -->
+
+        <a class="social-icon"
+           href="https://www.linkedin.com/in/michellyeufraziosantos1810/"
+           target="_blank"
+           rel="noopener"
+           aria-label="LinkedIn">
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.48 1s2.5 1.12 2.5 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-1 1.9-2.2 4-2.2 4.3 0 5.1 2.8 5.1 6.5V24h-4v-7.2c0-1.7 0-4-2.5-4s-2.9 1.9-2.9 3.8V24h-4V8z"/>
+          </svg>
+
+        </a>
+
+        <!-- INSTAGRAM -->
+
+        <a class="social-icon"
+           href="https://www.instagram.com/michellysantos.psi"
+           target="_blank"
+           rel="noopener"
+           aria-label="Instagram">
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+          </svg>
+
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- LINKS -->
+
+    <div class="footer-box">
+
+      <h3>Navegação</h3>
+
+      <a href="index.html">Início</a>
+
+      <a href="sobre.html">Sobre Mim</a>
+
+      <a href="contato.html">Agendar Consulta</a>
+
+      <button id="openLoginFooter"
+              class="footer-login"
+              type="button">
+
+        Área Restrita
+
+      </button>
+
+    </div>
+
+    <!-- CONTATO -->
+
+    <div class="footer-box">
+
+      <h3>Contato</h3>
+
+      <p>📍 Aveiro, Portugal / Online</p>
+
+      <a href="mailto:contato@michellysantospsi.com">
+        contato@michellysantospsi.com
+      </a>
+
+      <a href="https://wa.me/351910377246"
+         target="_blank"
+         rel="noopener">
+
+        +351 910 377 246
+
+      </a>
+
+      <span class="footer-status">
+        Atendimento Online Disponível
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER BOTTOM -->
+
+  <div class="footer-bottom">
+
+    <div class="footer-copy">
+      © 2026 Michelly Eufrazio Santos - Psicanalista.
+      Todos os direitos reservados.
+    </div>
+
+    <div class="footer-dev">
+
+      Desenvolvido por
+
+      <a href="https://www.dozedev.pt"
+         target="_blank"
+         rel="noopener">
+
+        DOZEDEV.COM
+
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+    <!-- MODAL DE LOGIN -->
+    <div id="loginModal" class="login-modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Área Restrita</h2>
+            <input type="text" id="loginUser" placeholder="E-mail ou Usuário">
+            <input type="password" id="loginPass" placeholder="Senha">
+            <button type="button" onclick="executarLogin(event)" class="btn" style="width: 100%;">Entrar</button> 
+            <p id="closeLogin" style="cursor:pointer; margin-top:20px; font-size:12px; color: #888;">Cancelar</p>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Função do WhatsApp
+        function enviarWhatsApp(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nomeCliente').value;
+            const email = document.getElementById('emailCliente').value;
+            const interesse = document.getElementById('interesseCliente').value;
+            const mensagem = document.getElementById('mensagemCliente').value || "Não informada";
+            const numeroTel = "+351910377246";
+            const textoMensagem = `✨ *Nova Solicitação de Consulta*\n\n👤 *PACIENTE:* ${nome}\n📧 *E-MAIL:* ${email}\n💼 *PLANO:* ${interesse}\n💬 *MENSAGEM:* ${mensagem}\n\n---\nEnviado via Site Michelly Santos`;
+            const linkWa = "https://wa.me/" + numeroTel + "?text=" + encodeURIComponent(textoMensagem);
+            window.open(linkWa, '_blank');
+        }
+
+        // Lógica para abrir/fechar o modal (Garante que os links funcionem)
+        const modal = document.getElementById('loginModal');
+        const btnHeader = document.getElementById('openLogin');
+        const btnFooter = document.getElementById('openLoginFooter');
+        const btnClose = document.getElementById('closeLogin');
+
+        [btnHeader, btnFooter].forEach(btn => {
+            if(btn) {
+                btn.onclick = function(e) {
+                    e.preventDefault();
+                    modal.style.display = "block";
+                }
+            }
+        });
+
+        if(btnClose) {
+            btnClose.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+
+        // Fecha se clicar fora do modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

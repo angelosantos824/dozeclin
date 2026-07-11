@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Master | Michelly Santos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #fcfbf9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .detalhes-container { max-width: 1200px; margin: 40px auto; padding: 20px; flex: 1; }
+        .grid-prontuario { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+        
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card h3 { color: #8c7851; border-bottom: 1px solid #f4f1ea; padding-bottom: 10px; margin-top: 0; }
+        
+        .header-ficha { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            width: 100%; 
+        }        
+        .anamnese-box { background: #fdfaf5; border-left: 4px solid #d4a373; padding: 20px; border-radius: 8px; margin-top: 10px; font-size: 0.95rem; line-height: 1.8; color: #444; }
+        .historia-box { background: #f0f4f1; border-left: 4px solid #7b8f80; padding: 20px; border-radius: 8px; margin-top: 10px; font-size: 1rem; font-style: italic; color: #2d3436; }
+        
+        .no-data { color: #999; font-style: italic; font-size: 0.85rem; }
+
+        .dados-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .dados-grid label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+        .dados-grid input, .dados-grid select { padding: 10px; border: 1px solid #e9e0d2; border-radius: 6px; width: 100%; box-sizing: border-box; }
+        
+        .agendamento-box { background: #fff9db; padding: 15px; border-radius: 8px; border: 1px solid #fab005; margin-bottom: 20px; }
+        .agendamento-inputs { display: flex; gap: 10px; margin-top: 5px; }
+        .agendamento-inputs input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+
+        textarea { width: 100%; height: 250px; border: 1px solid #e9e0d2; border-radius: 8px; padding: 15px; font-family: inherit; resize: none; margin-top: 10px; box-sizing: border-box; line-height: 1.6; outline: none; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { padding: 12px 8px; text-align: left; border-bottom: 1px solid #f4f1ea; }
+        .status-pago { color: #7b8f80; font-weight: bold; }
+        .status-pendente { color: #d4a373; font-weight: bold; }
+
+        .btn-save { background: #7b8f80; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-save:hover { background: #637367; transform: translateY(-2px); }
+        .btn-print { background: white; color: #555; border: 1px solid #ddd; padding: 12px 20px; border-radius: 8px; cursor: pointer; margin-right: 10px; }
+        .btn-financeiro { background: #8c7851; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 15px; }
+
+        footer { background: #fff; padding: 40px 20px 20px; border-top: 1px solid #f4f1ea; margin-top: 50px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .footer-box h3 { color: #8c7851; margin-bottom: 15px; font-size: 1.1rem; }
+        .footer-box p, .footer-box a { color: #666; font-size: 0.9rem; text-decoration: none; display: block; margin-bottom: 8px; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #eee; margin-top: 30px; font-size: 0.8rem; color: #999; }
+        .social-icon { display: inline-block !important; width: 30px; height: 30px; background: #f4f1ea; border-radius: 50%; text-align: center; line-height: 30px; margin-right: 10px; color: #8c7851 !important; font-weight: bold; }
+
+        @media print {
+            .btn-save, .btn-print, .btn-financeiro, .header-ficha a, .col-financeiro, .agendamento-box, footer { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="detalhes-container">
+        <div class="header-ficha">
+            <div>
+                <a href="adm.html" style="text-decoration: none; color: #888; font-size: 0.9rem;">← Voltar ao Painel</a>
+                <h1 id="nomeDisplay" style="margin: 10px 0 5px 0; color: #555;">Carregando...</h1>
+                <p id="infoCliente" style="color: #d4a373; font-weight: bold; margin: 0;"></p>
+            </div>
+            <div>
+                <button class="btn-print" onclick="window.print()">🖨️ Imprimir</button>
+                <button class="btn-save" onclick="salvarTudo()">Salvar Prontuário</button>
+            </div>
+        </div>
+
+        <div class="grid-prontuario">
+            <div class="col-dados">
+                <div class="agendamento-box">
+                    <label><strong>📅 Próxima Sessão:</strong></label>
+                    <div class="agendamento-inputs">
+                         <input type="date" id="agendamentoData" style="flex: 2;">
+                         <input type="time" id="agendamentoHora" style="flex: 1;">
+                    </div>
+                    <select id="fusoPaciente">
+                        <option value="Europe/Lisbon">Portugal</option>
+                        <option value="America/Sao_Paulo">Brasil - São Paulo/Brasília</option>
+                        <option value="America/Manaus">Brasil - Manaus</option>
+                        <option value="America/Fortaleza">Brasil - Fortaleza</option>
+                    </select>
+<br>
+                    <label><strong>🔗 Link da Reunião:</strong></label>
+                    <input 
+                        type="url" 
+                        id="linkReuniao" 
+                        placeholder="Cole aqui o link do Zoom ou Google Meet"
+                        style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-top:8px;"
+>
+                    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #fab005;">
+                        <label style="display: flex; align-items: center; cursor: pointer; color: #85741d; font-weight: bold;">
+                            <input type="checkbox" id="liberar7Dias" style="width: auto; margin-right: 10px;"> 
+                            🔓 Liberar Exercício 7 Dias
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Resumo da História (Queixa Principal)</h3>
+                    <div id="historiaCliente" class="historia-box">Carregando história...</div>
+                </div>
+
+                <div class="card">
+                    <h3>Dados Pessoais</h3>
+                    <div class="dados-grid">
+                        <div><label>E-mail (Login)</label><input type="text" id="email" readonly style="background:#f9f9f9"></div>
+                        <div><label>Telefone</label><input type="text" id="telefone"></div>
+                        <div><label>Nascimento</label><input type="date" id="nascimento" onchange="calcularIdadeAutomático(this.value)"></div>
+                        <div><label>Idade</label><input type="text" id="idade" readonly style="background: #f9f9f9;"></div>
+                        <div>
+                            <label>Status Terapêutico</label>
+                            <select id="statusPaciente">
+                                <option value="Atendimento">Em Atendimento</option>
+                                <option value="Pausa">Em Pausa</option>
+                                <option value="Alta">Alta Terapêutica</option>
+                            </select>
+                        </div>
+                        <div><label>Morada/Endereço</label><input type="text" id="morada"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Relatório de Anamnese Completo</h3>
+                    <div id="anamneseConteudo" class="no-data">Carregando dados...</div>
+                </div>
+
+                <div class="card">
+                    <h3>Notas de Evolução (Sigiloso)</h3>
+                    <textarea id="notasEvolucao" placeholder="Registre aqui a evolução das sessões..."></textarea>
+                </div>
+            </div>
+
+            <div class="col-financeiro">
+                <div class="card">
+                    <h3>Histórico Financeiro</h3>
+                    <button class="btn-financeiro" onclick="addSessao()">+ Registrar Nova Sessão</button>
+                    <table id="tabelaFinanceiro">
+                        <thead><tr><th>Data</th><th>Valor</th><th>Status</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                    <div id="resumoFinanceiro" style="margin-top: 15px; font-size: 0.85rem; border-top: 1px dashed #eee; padding-top: 10px;"></div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size: 0.9rem; color: #555;">Progresso do Exercício 7 Dias</h3>
+                    <div class="barra-fundo" style="background: #eee; border-radius: 10px; height: 18px; width: 100%; overflow: hidden; margin-top: 10px;">
+                        <div id="barraProgresso" class="barra-preenchimento" style="background: linear-gradient(90deg, #7b8f80, #a3b8a9); height: 100%; width: 0%; transition: width 1s;"></div>
+                    </div>
+                    <p id="textoProgresso" style="font-size: 0.8rem; margin-top: 8px; color: #888; text-align: center;">0% concluído</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-premium">
+
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- BRAND -->
+
+    <div class="footer-box footer-brand">
+
+      <div class="footer-logo">
+        <img src="imagem/favicon-96x96.png" alt="Michelly Santos">
+      </div>
+
+      <h3>Michelly Eufrazio Santos</h3>
+
+      <p>
+        Psicanalista Clínica especializada em acolhimento emocional,
+        autoconhecimento e desenvolvimento pessoal.
+      </p>
+
+      <!-- REDES -->
+
+      <div class="redes-sociais">
+
+        <!-- LINKEDIN -->
+
+        <a class="social-icon"
+           href="https://www.linkedin.com/in/michellyeufraziosantos1810/"
+           target="_blank"
+           rel="noopener"
+           aria-label="LinkedIn">
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.48 1s2.5 1.12 2.5 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-1 1.9-2.2 4-2.2 4.3 0 5.1 2.8 5.1 6.5V24h-4v-7.2c0-1.7 0-4-2.5-4s-2.9 1.9-2.9 3.8V24h-4V8z"/>
+          </svg>
+
+        </a>
+
+        <!-- INSTAGRAM -->
+
+        <a class="social-icon"
+           href="https://www.instagram.com/michellysantos.psi"
+           target="_blank"
+           rel="noopener"
+           aria-label="Instagram">
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+          </svg>
+
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- LINKS -->
+
+    <div class="footer-box">
+
+      <h3>Navegação</h3>
+
+      <a href="index.html">Início</a>
+
+      <a href="sobre.html">Sobre Mim</a>
+
+      <a href="contato.html">Agendar Consulta</a>
+
+      <button id="openLoginFooter"
+              class="footer-login"
+              type="button">
+
+        Área Restrita
+
+      </button>
+
+    </div>
+
+    <!-- CONTATO -->
+
+    <div class="footer-box">
+
+      <h3>Contato</h3>
+
+      <p>📍 Aveiro, Portugal / Online</p>
+
+      <a href="mailto:contato@michellysantospsi.com">
+        contato@michellysantospsi.com
+      </a>
+
+      <a href="https://wa.me/351910377246"
+         target="_blank"
+         rel="noopener">
+
+        +351 910 377 246
+
+      </a>
+
+      <span class="footer-status">
+        Atendimento Online Disponível
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER BOTTOM -->
+
+  <div class="footer-bottom">
+
+    <div class="footer-copy">
+      © 2026 Michelly Eufrazio Santos - Psicanalista.
+      Todos os direitos reservados.
+    </div>
+
+    <div class="footer-dev">
+
+      Desenvolvido por
+
+      <a href="https://angelosantos824.github.io/usedoze/"
+         target="_blank"
+         rel="noopener">
+
+        DOZEDEV.COM
+
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+
+</body>
+</html>

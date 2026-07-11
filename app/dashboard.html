@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Painel</h1>
+            <p>Resumo operacional da clinica autenticada.</p>
+          </div>
+        </div>
+
+        <p class="muted" data-dashboard-status>A carregar...</p>
+
+        <div class="grid grid-4" data-dashboard-cards hidden>
+          <article class="card metric">
+            <span>Pacientes</span>
+            <strong id="metric-patients">0</strong>
+          </article>
+          <article class="card metric">
+            <span>Ativos</span>
+            <strong id="metric-active">0</strong>
+          </article>
+          <article class="card metric">
+            <span>Consultas futuras</span>
+            <strong id="metric-appointments">0</strong>
+          </article>
+          <article class="card metric">
+            <span>Estado da clinica</span>
+            <strong id="metric-clinic">-</strong>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../assets/js/pages/dashboard.js"></script>
+</body>
+</html>

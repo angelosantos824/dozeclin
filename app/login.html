@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/auth.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body class="auth-page">
+  <main class="auth-panel">
+    <h1>DOZECLIN</h1>
+    <p>Gestao clinica segura para equipas de saude.</p>
+
+    <div data-message hidden></div>
+
+    <form data-login-form class="grid">
+      <label class="field">
+        Email
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+
+      <label class="field">
+        Senha
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+
+      <button class="button" type="submit">Entrar</button>
+      <button class="button button-secondary" type="button" data-reset-password>Recuperar senha</button>
+    </form>
+  </main>
+
+  <script type="module" src="../assets/js/pages/login.js"></script>
+</body>
+</html>

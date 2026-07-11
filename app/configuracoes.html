@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuracoes | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Configuracoes da clinica</h1>
+            <p>Identidade, contactos e padroes operacionais.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div data-message hidden></div>
+          <form data-settings-form class="form-grid">
+            <label class="field">
+              Nome da clinica
+              <input name="name" required>
+            </label>
+            <label class="field">
+              Razao social
+              <input name="legal_name">
+            </label>
+            <label class="field">
+              Email
+              <input type="email" name="email">
+            </label>
+            <label class="field">
+              Telefone
+              <input name="phone">
+            </label>
+            <label class="field">
+              WhatsApp
+              <input name="whatsapp">
+            </label>
+            <label class="field">
+              Pais
+              <input name="country">
+            </label>
+            <label class="field">
+              Cidade
+              <input name="city">
+            </label>
+            <label class="field">
+              Codigo postal
+              <input name="postal_code">
+            </label>
+            <label class="field field-full">
+              Endereco
+              <textarea name="address"></textarea>
+            </label>
+            <label class="field">
+              Fuso horario
+              <input name="timezone" required>
+            </label>
+            <label class="field">
+              Moeda principal
+              <select name="default_currency">
+                <option value="EUR">Euro</option>
+                <option value="BRL">Real</option>
+                <option value="USD">Dolar</option>
+              </select>
+            </label>
+            <label class="field">
+              Cor primaria
+              <input type="color" name="primary_color">
+            </label>
+            <label class="field">
+              Cor secundaria
+              <input type="color" name="secondary_color">
+            </label>
+            <label class="field">
+              Rotulo de especialidade
+              <input name="specialty_label">
+            </label>
+            <label class="field">
+              Rotulo de registro profissional
+              <input name="professional_registration_label">
+            </label>
+            <label class="field">
+              Duracao da consulta
+              <input type="number" min="10" step="5" name="appointment_duration">
+            </label>
+            <label class="field">
+              Intervalo entre consultas
+              <input type="number" min="0" step="5" name="appointment_interval">
+            </label>
+            <label class="field field-full">
+              Politica de cancelamento
+              <textarea name="cancellation_policy"></textarea>
+            </label>
+            <label class="field field-full">
+              Assinatura de email
+              <textarea name="email_signature"></textarea>
+            </label>
+            <label class="field field-full">
+              Rodape
+              <textarea name="footer_text"></textarea>
+            </label>
+            <button class="button field-full" type="submit">Guardar configuracoes</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../assets/js/pages/configuracoes.js"></script>
+</body>
+</html>

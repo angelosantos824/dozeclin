@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anamnese Inicial | Michelly Santos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #fcfbf9; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h2 { color: #8c7851; text-align: center; margin-bottom: 30px; }
+        .campo-grupo { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; color: #555; margin-bottom: 8px; font-size: 0.95rem; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #e9e0d2; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        textarea { height: 100px; resize: none; }
+        .btn-enviar { width: 100%; background: #7b8f80; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 20px; }
+        .btn-enviar:hover { background: #637367; }
+        .secao-titulo { background: #fdfaf5; padding: 10px; border-radius: 5px; color: #8c7851; margin: 40px 0 20px 0; font-weight: bold; border-left: 4px solid #d4a373; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Formulário de Anamnese Inicial</h2>
+    <p style="text-align: center; color: #888; font-size: 0.9rem;">As informações aqui registradas são estritamente sigilosas.</p>
+
+    <form id="formAnamnese">
+        <div class="secao-titulo">Dados Pessoais & Hábitos</div>
+        <div class="campo-grupo">
+            <label>Profissão</label>
+            <input type="text" name="profissao" required>
+        </div>
+        <div class="campo-grupo">
+            <label>Contato de Parente Próximo (Nome/Telefone)</label>
+            <input type="text" name="contato_parente" required>
+        </div>
+        <div class="campo-grupo">
+            <label>Faz uso de algum medicamento? Qual?</label>
+            <input type="text" name="medicamentos">
+        </div>
+        <div class="campo-grupo">
+            <label>Pratica atividades físicas?</label>
+            <select name="exercicios">
+                <option value="Não">Não</option>
+                <option value="Sim, raramente">Sim, raramente</option>
+                <option value="Sim, regularmente">Sim, regularmente</option>
+            </select>
+        </div>
+
+        <div class="secao-titulo">Mapeamento do Trauma</div>
+        <div class="campo-grupo">
+            <label>Como descreve sua relação com seus pais e irmãos?</label>
+            <textarea name="relacao_familiar"></textarea>
+        </div>
+        <div class="campo-grupo">
+            <label>Há histórico de abuso (físico, emocional, sexual) na família?</label>
+            <select name="historico_abuso">
+                <option value="Não">Não</option>
+                <option value="Sim">Sim</option>
+                <option value="Não desejo informar">Não desejo informar</option>
+            </select>
+        </div>
+        <div class="campo-grupo">
+            <label>O que te trouxe à terapia hoje? (Queixa Principal)</label>
+            <textarea name="queixa_principal" maxlength="300"></textarea>
+        </div>
+        <div class="campo-grupo">
+            <label>Qual seu maior desafio atualmente?</label>
+            <textarea name="maior_desafio"></textarea>
+        </div>
+
+        <button type="submit" class="btn-enviar">Finalizar e Enviar para Michelly</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+    const form = document.getElementById('formAnamnese');
+    
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.querySelector('.btn-enviar');
+        btn.innerText = "Enviando...";
+        btn.disabled = true;
+
+        const formData = new FormData(form);
+        const anamneseData = Object.fromEntries(formData.entries());
+        
+        // Pegamos o ID do paciente logado que deve estar no localStorage
+        const idPaciente = localStorage.getItem('paciente_id'); 
+
+        const { error } = await _supabase
+            .from('pacientes')
+            .update({ anamnese_completa: anamneseData })
+            .eq('id', idPaciente);
+
+        if (error) {
+            alert("Erro ao enviar: " + error.message);
+            btn.innerText = "Tentar Novamente";
+            btn.disabled = false;
+        } else {
+            alert("Anamnese enviada com sucesso! Obrigado.");
+            window.location.href = "area-cliente.html";
+        }
+    };
+</script>
+</body>
+</html>
