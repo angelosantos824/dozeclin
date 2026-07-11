@@ -28,6 +28,9 @@ Funcoes auxiliares:
 - `finance` acessa financeiro, nao conteudo clinico confidencial.
 - `professional`, `supervisor` e `clinic_admin` acessam conteudo clinico.
 - `super_admin` nao recebe acesso clinico irrestrito automatico nas policies operacionais.
+- consultas validam paciente e profissional dentro da mesma `clinic_id`;
+- conflito de agenda e bloqueado no banco por `dozeclin.validate_appointment()`.
+- prontuarios validam paciente, profissional e registro dentro da mesma `clinic_id`.
 
 ## Auth compartilhado
 

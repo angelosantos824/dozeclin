@@ -1,1 +1,51 @@
-/* Reserved for Sprint 2. */
+.agenda-list {
+  display: grid;
+  gap: 12px;
+}
+
+.appointment-item {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.appointment-time {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.appointment-main {
+  display: grid;
+  gap: 4px;
+}
+
+.appointment-main strong {
+  font-size: 1rem;
+}
+
+.appointment-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.appointment-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px) {
+  .appointment-item {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-actions {
+    justify-content: flex-start;
+  }
+}

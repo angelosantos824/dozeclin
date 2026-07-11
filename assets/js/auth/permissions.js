@@ -2,29 +2,58 @@ export const PERMISSIONS = {
   PATIENTS_READ: 'patients.read',
   PATIENTS_CREATE: 'patients.create',
   PATIENTS_UPDATE: 'patients.update',
+  PROFESSIONALS_READ: 'professionals.read',
+  PROFESSIONALS_CREATE: 'professionals.create',
+  PROFESSIONALS_UPDATE: 'professionals.update',
   RECORDS_READ: 'records.read',
   RECORDS_CREATE: 'records.create',
+  MEDICAL_RECORDS_READ: 'medical_records.read',
+  MEDICAL_RECORDS_CREATE: 'medical_records.create',
+  MEDICAL_RECORDS_UPDATE: 'medical_records.update',
+  MEDICAL_RECORDS_SIGN: 'medical_records.sign',
+  MEDICAL_RECORDS_CANCEL: 'medical_records.cancel',
+  CLINICS_READ: 'clinics.read',
+  CLINICS_CREATE: 'clinics.create',
+  CLINICS_UPDATE: 'clinics.update',
+  CLINICS_SUSPEND: 'clinics.suspend',
+  CLINICS_CANCEL: 'clinics.cancel',
   APPOINTMENTS_MANAGE: 'appointments.manage',
+  APPOINTMENTS_READ: 'appointments.read',
+  APPOINTMENTS_CREATE: 'appointments.create',
+  APPOINTMENTS_UPDATE: 'appointments.update',
+  APPOINTMENTS_CANCEL: 'appointments.cancel',
+  APPOINTMENTS_COMPLETE: 'appointments.complete',
   FINANCE_READ: 'finance.read',
   FINANCE_MANAGE: 'finance.manage',
   SETTINGS_MANAGE: 'settings.manage'
 };
 
 const ROLE_PERMISSIONS = {
-  super_admin: [],
-  clinic_admin: Object.values(PERMISSIONS),
+  super_admin: Object.values(PERMISSIONS),
+  clinic_admin: Object.values(PERMISSIONS).filter((permission) => !permission.startsWith('clinics.')),
   reception: [
     PERMISSIONS.PATIENTS_READ,
     PERMISSIONS.PATIENTS_CREATE,
     PERMISSIONS.PATIENTS_UPDATE,
-    PERMISSIONS.APPOINTMENTS_MANAGE
+    PERMISSIONS.PROFESSIONALS_READ,
+    PERMISSIONS.APPOINTMENTS_READ,
+    PERMISSIONS.APPOINTMENTS_CREATE,
+    PERMISSIONS.APPOINTMENTS_UPDATE,
+    PERMISSIONS.APPOINTMENTS_CANCEL
   ],
   professional: [
     PERMISSIONS.PATIENTS_READ,
     PERMISSIONS.PATIENTS_UPDATE,
     PERMISSIONS.RECORDS_READ,
     PERMISSIONS.RECORDS_CREATE,
-    PERMISSIONS.APPOINTMENTS_MANAGE
+    PERMISSIONS.MEDICAL_RECORDS_READ,
+    PERMISSIONS.MEDICAL_RECORDS_CREATE,
+    PERMISSIONS.MEDICAL_RECORDS_UPDATE,
+    PERMISSIONS.MEDICAL_RECORDS_SIGN,
+    PERMISSIONS.MEDICAL_RECORDS_CANCEL,
+    PERMISSIONS.APPOINTMENTS_READ,
+    PERMISSIONS.APPOINTMENTS_UPDATE,
+    PERMISSIONS.APPOINTMENTS_COMPLETE
   ],
   finance: [
     PERMISSIONS.PATIENTS_READ,
@@ -33,8 +62,19 @@ const ROLE_PERMISSIONS = {
   ],
   supervisor: [
     PERMISSIONS.PATIENTS_READ,
+    PERMISSIONS.PROFESSIONALS_READ,
     PERMISSIONS.RECORDS_READ,
+    PERMISSIONS.MEDICAL_RECORDS_READ,
+    PERMISSIONS.MEDICAL_RECORDS_CREATE,
+    PERMISSIONS.MEDICAL_RECORDS_UPDATE,
+    PERMISSIONS.MEDICAL_RECORDS_SIGN,
+    PERMISSIONS.MEDICAL_RECORDS_CANCEL,
     PERMISSIONS.APPOINTMENTS_MANAGE,
+    PERMISSIONS.APPOINTMENTS_READ,
+    PERMISSIONS.APPOINTMENTS_CREATE,
+    PERMISSIONS.APPOINTMENTS_UPDATE,
+    PERMISSIONS.APPOINTMENTS_CANCEL,
+    PERMISSIONS.APPOINTMENTS_COMPLETE,
     PERMISSIONS.FINANCE_READ
   ],
   patient: []
@@ -42,7 +82,5 @@ const ROLE_PERMISSIONS = {
 
 export function hasPermission(profile, permission) {
   if (!profile || !permission) return false;
-  if (profile.role === 'super_admin') return true;
-
   return (ROLE_PERMISSIONS[profile.role] || []).includes(permission);
 }

@@ -5,17 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profissionais | DOZECLIN</title>
   <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/profissionais.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body>
   <div class="app-shell" data-app-shell>
     <aside class="sidebar" data-sidebar></aside>
     <main class="main">
-      <div class="mobile-bar"><strong>DOZECLIN</strong><button class="button button-secondary" type="button" data-menu-toggle>Menu</button></div>
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
       <header class="topbar" data-topbar></header>
-      <section class="content"><div class="panel"><h1>Profissionais</h1><p class="muted">Modulo reservado para Sprint posterior.</p></div></section>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Profissionais</h1>
+            <p>Equipe clinica da clinica autenticada.</p>
+          </div>
+          <button class="button" type="button" data-new-professional>Novo profissional</button>
+        </div>
+
+        <div class="panel">
+          <div data-page-message hidden></div>
+          <div class="toolbar">
+            <input type="search" data-filter placeholder="Pesquisar por nome, email ou especialidade">
+            <select data-status-filter>
+              <option value="">Todos os estados</option>
+              <option value="active">Ativo</option>
+              <option value="inactive">Inativo</option>
+              <option value="suspended">Suspenso</option>
+              <option value="pending_invite">Convite pendente</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Especialidade</th>
+                  <th>Registro</th>
+                  <th>Contacto</th>
+                  <th>Estado</th>
+                  <th>Acoes</th>
+                </tr>
+              </thead>
+              <tbody data-professionals-table></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
-  <script type="module" src="../assets/js/pages/placeholder.js"></script>
+
+  <div class="modal" data-professional-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="professional-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="professional-modal-title">Profissional</h2>
+          <p class="muted">O acesso Auth sera criado por fluxo seguro futuro.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-modal>Fechar</button>
+      </div>
+
+      <div data-form-message hidden></div>
+
+      <form data-professional-form class="form-grid">
+        <label class="field">
+          Nome completo
+          <input name="full_name" required>
+        </label>
+        <label class="field">
+          Email
+          <input type="email" name="email" required>
+        </label>
+        <label class="field">
+          Telefone
+          <input name="phone" inputmode="tel">
+        </label>
+        <label class="field">
+          Perfil
+          <select name="role">
+            <option value="professional">Profissional de saude</option>
+            <option value="supervisor">Supervisor</option>
+          </select>
+        </label>
+        <label class="field">
+          Especialidade
+          <input name="specialty" required>
+        </label>
+        <label class="field">
+          Registro profissional
+          <input name="professional_registration">
+        </label>
+        <label class="field">
+          Estado
+          <select name="status">
+            <option value="pending_invite">Convite pendente</option>
+            <option value="active">Ativo</option>
+            <option value="inactive">Inativo</option>
+            <option value="suspended">Suspenso</option>
+          </select>
+        </label>
+        <button class="button field-full" type="submit">Guardar profissional</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/profissionais.js"></script>
 </body>
 </html>

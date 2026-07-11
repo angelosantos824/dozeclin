@@ -79,6 +79,12 @@ function buildActions(patient) {
   const cell = document.createElement('td');
   cell.className = 'table-actions';
 
+  const open = document.createElement('a');
+  open.className = 'icon-button';
+  open.href = `paciente-detalhes.html?id=${patient.id}`;
+  open.title = 'Abrir paciente';
+  open.textContent = 'Abrir';
+
   const edit = document.createElement('button');
   edit.type = 'button';
   edit.className = 'icon-button';
@@ -93,7 +99,7 @@ function buildActions(patient) {
   archive.textContent = 'Arquivar';
   archive.addEventListener('click', () => archiveSelectedPatient(patient));
 
-  cell.append(edit, archive);
+  cell.append(open, edit, archive);
   return cell;
 }
 

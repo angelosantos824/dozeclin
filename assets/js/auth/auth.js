@@ -25,8 +25,28 @@ export async function getCurrentProfile() {
 
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, clinic_id, full_name, email, role, status, clinics(id, name, status, default_currency, timezone, primary_color)')
-    .eq('id', session.user.id)
+    .select(`
+      id,
+      clinic_id,
+      auth_user_id,
+      full_name,
+      email,
+      role,
+      status,
+      clinics:clinics!profiles_clinic_id_fkey (
+        id,
+        name,
+        slug,
+        status,
+        specialty,
+        plan_code,
+        logo_url,
+        primary_color,
+        secondary_color,
+        timezone
+      )
+    `)
+    .or(`auth_user_id.eq.${session.user.id},id.eq.${session.user.id}`)
     .single();
 
   if (error) throw error;

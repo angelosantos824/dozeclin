@@ -3,6 +3,7 @@ import { APP_NAME } from '../config/constants.js';
 
 const NAV_ITEMS = [
   ['dashboard.html', 'Painel'],
+  ['clinicas.html', 'Clinicas', ['super_admin']],
   ['pacientes.html', 'Pacientes'],
   ['agenda.html', 'Agenda'],
   ['anamnese.html', 'Anamnese'],
@@ -20,7 +21,7 @@ export function mountLayout(profile) {
 
   if (!shell || !sidebar || !topbar) return;
 
-  buildSidebar(sidebar);
+  buildSidebar(sidebar, profile);
   buildTopbar(topbar, profile);
 
   mobileToggle?.addEventListener('click', () => {
@@ -28,7 +29,7 @@ export function mountLayout(profile) {
   });
 }
 
-function buildSidebar(sidebar) {
+function buildSidebar(sidebar, profile) {
   const brand = document.createElement('a');
   brand.href = 'dashboard.html';
   brand.className = 'brand';
@@ -47,7 +48,8 @@ function buildSidebar(sidebar) {
   nav.className = 'side-nav';
 
   const currentPage = window.location.pathname.split('/').pop();
-  NAV_ITEMS.forEach(([href, label]) => {
+  NAV_ITEMS.forEach(([href, label, roles]) => {
+    if (roles && !roles.includes(profile?.role)) return;
     const link = document.createElement('a');
     link.href = href;
     link.textContent = label;
@@ -66,7 +68,9 @@ function buildSidebar(sidebar) {
 function buildTopbar(topbar, profile) {
   const clinicBox = document.createElement('div');
   const clinicName = document.createElement('strong');
-  clinicName.textContent = profile?.clinics?.name || 'Clinica';
+  clinicName.textContent = profile?.role === 'super_admin'
+    ? 'DOZEDEV'
+    : profile?.clinics?.name || 'Clinica';
   const userName = document.createElement('span');
   userName.textContent = profile?.full_name || profile?.email || 'Utilizador';
   clinicBox.append(clinicName, userName);

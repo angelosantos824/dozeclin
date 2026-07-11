@@ -64,17 +64,22 @@ Implementado nesta etapa:
 - Layout administrativo DOZECLIN.
 - Dashboard inicial.
 - Modulo inicial de pacientes.
+- Modulo de profissionais.
+- Agenda simples e consultas.
+- Prontuario clinico inicial.
 - Configuracoes basicas da clinica.
 - Migration com tabelas-base e RLS inicial.
 - Documentacao tecnica.
 
 Nao implementado nesta Sprint:
 
-- Prontuario completo.
+- Assinatura digital de prontuario.
+- Adendos de registros assinados.
 - Anamnese migrada.
 - Tarefas do paciente.
 - Financeiro migrado.
 - Area do paciente.
+- Criacao automatica de utilizador Auth para profissional.
 - Dados reais da Michelly.
 - Deploy.
 

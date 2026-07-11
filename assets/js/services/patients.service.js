@@ -13,6 +13,18 @@ export async function listPatients(clinicId) {
   return data || [];
 }
 
+export async function getPatientById(clinicId, patientId) {
+  const { data, error } = await supabase
+    .from('patients')
+    .select(PATIENT_FIELDS)
+    .eq('clinic_id', clinicId)
+    .eq('id', patientId)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
 export async function createPatient(clinicId, payload) {
   const { data, error } = await supabase
     .from('patients')

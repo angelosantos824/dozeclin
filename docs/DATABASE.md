@@ -84,3 +84,32 @@ Tarefas:
 - Exclusao definitiva de pacientes nao foi exposta na nova interface.
 - Nenhuma tabela DOZECLIN deve ser criada em `public`.
 - Tabelas do DOZEDEV Control Center em `public` nao devem ser alteradas.
+
+## Sprint 2
+
+Migration incremental:
+
+`supabase/migrations/20260711190000_dozeclin_sprint2_professionals_appointments.sql`
+
+Alteracoes:
+
+- adiciona `pending_invite` em `dozeclin.user_status`;
+- permite profissionais pendentes sem criar Auth inseguro, usando `dozeclin.profiles.auth_user_id`;
+- adiciona `dozeclin.appointments.created_by`;
+- cria validacao de conflito em `dozeclin.validate_appointment()`;
+- ajusta policies de `dozeclin.profiles` e `dozeclin.appointments`.
+
+## Sprint 3.1
+
+Migration incremental:
+
+`supabase/migrations/20260711210000_dozeclin_sprint3_1_medical_records.sql`
+
+Alteracoes:
+
+- complementa `dozeclin.medical_records`;
+- cria tipos `dozeclin.medical_record_type` e `dozeclin.medical_record_status`;
+- adiciona auditoria basica por `created_by`;
+- adiciona `record_date`, `diagnosis`, `conduct`, `prescription`, `cancel_reason`, `signed_at` e `cancelled_at`;
+- cria trigger de integridade para impedir edicao comum de registros assinados;
+- cria RLS especifica para prontuario clinico.

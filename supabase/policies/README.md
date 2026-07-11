@@ -25,3 +25,19 @@ As politicas sao aplicadas no schema `dozeclin`, nao no schema `public`.
 - `financial_entries_finance_only`: restringe financeiro a `clinic_admin` e `finance`.
 - `audit_logs_insert_own_clinic`: permite registrar auditoria apenas na propria clinica.
 - `audit_logs_select_admin`: permite leitura de auditoria por `clinic_admin` e `supervisor`.
+
+## Ajustes Sprint 2
+
+- `profiles_insert_admin`: permite que `clinic_admin` crie profissionais ou supervisores da propria clinica com convite pendente.
+- `profiles_update_self_or_admin`: permite que `clinic_admin` atualize profissionais da propria clinica sem trocar `clinic_id`.
+- `appointments_staff_manage`: restringe profissional as proprias consultas e mantem `clinic_admin`, `reception` e `supervisor` na propria clinica.
+- `dozeclin.validate_appointment()`: bloqueia paciente/profissional de outra clinica, horarios invalidos, conflitos e conclusao por perfil sem permissao.
+
+## Ajustes Sprint 3.1
+
+- `medical_records_select_clinic`: leitura de prontuarios apenas por perfis clinicos da propria clinica.
+- `medical_records_insert_authorized`: criacao apenas por perfil clinico autorizado da propria clinica.
+- `medical_records_update_authorized_drafts`: atualizacao comum apenas de rascunhos por perfil clinico autorizado.
+- `medical_records_sign_authorized`: transicao controlada de rascunho para assinado.
+- `medical_records_cancel_authorized`: cancelamento controlado de rascunhos ou assinados.
+- `dozeclin.validate_medical_record()`: valida clinica, paciente, profissional, conteudo obrigatorio, autoria pela sessao, datas de auditoria e imutabilidade de registros assinados/cancelados.

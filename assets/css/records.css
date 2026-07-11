@@ -1,0 +1,65 @@
+.patient-summary {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+
+.record-list {
+  display: grid;
+  gap: 12px;
+}
+
+.record-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.record-item h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.record-meta,
+.record-summary {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.record-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.record-detail-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.record-detail-block {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.record-detail-block strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 720px) {
+  .record-item {
+    grid-template-columns: 1fr;
+  }
+
+  .record-actions {
+    justify-content: flex-start;
+  }
+}

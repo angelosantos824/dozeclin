@@ -6,6 +6,8 @@
   <title>Painel | DOZECLIN</title>
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/profissionais.css">
+  <link rel="stylesheet" href="../assets/css/agenda.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body>
@@ -41,9 +43,22 @@
             <strong id="metric-appointments">0</strong>
           </article>
           <article class="card metric">
+            <span>Consultas hoje</span>
+            <strong id="metric-today">0</strong>
+          </article>
+          <article class="card metric">
+            <span>Confirmadas hoje</span>
+            <strong id="metric-confirmed-today">0</strong>
+          </article>
+          <article class="card metric">
             <span>Estado da clinica</span>
             <strong id="metric-clinic">-</strong>
           </article>
+        </div>
+
+        <div class="panel" style="margin-top: 18px;">
+          <h2>Proximas consultas</h2>
+          <div data-next-appointments class="agenda-list"></div>
         </div>
       </section>
     </main>

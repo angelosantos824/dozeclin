@@ -1,0 +1,26 @@
+.clinic-metrics {
+  margin-bottom: 18px;
+}
+
+.clinic-modal-panel {
+  width: min(920px, 100%);
+}
+
+[data-clinics-table] td {
+  vertical-align: top;
+}
+
+[data-clinics-table] strong,
+[data-clinics-table] small {
+  display: block;
+}
+
+.status-trial {
+  background: #eef7fb;
+  color: var(--primary);
+}
+
+.status-cancelled {
+  background: #f2f4f7;
+  color: var(--muted);
+}

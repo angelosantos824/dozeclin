@@ -65,11 +65,13 @@ Documentos clinicos devem ficar separados de arquivos publicos do DOZEDEV.
 - Autenticacao.
 - Dashboard.
 - Pacientes.
+- Profissionais.
+- Agenda e consultas.
+- Prontuario clinico inicial.
 - Configuracoes da clinica.
 
 ## Modulos preservados para Sprints posteriores
 
-- Prontuario.
 - Anamnese.
 - Tarefas.
 - Financeiro.

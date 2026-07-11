@@ -5,17 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paciente | DOZECLIN</title>
   <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/profissionais.css">
+  <link rel="stylesheet" href="../assets/css/records.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body>
   <div class="app-shell" data-app-shell>
     <aside class="sidebar" data-sidebar></aside>
     <main class="main">
-      <div class="mobile-bar"><strong>DOZECLIN</strong><button class="button button-secondary" type="button" data-menu-toggle>Menu</button></div>
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
       <header class="topbar" data-topbar></header>
-      <section class="content"><div class="panel"><h1>Detalhes do paciente</h1><p class="muted">Prontuario sera migrado em Sprint posterior.</p></div></section>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <a href="pacientes.html" class="muted">Voltar para pacientes</a>
+            <h1 data-patient-name>Paciente</h1>
+            <p data-patient-meta>Carregando dados do paciente...</p>
+          </div>
+          <button class="button" type="button" data-new-record>Novo registro</button>
+        </div>
+
+        <div class="panel patient-summary">
+          <strong>Dados do paciente</strong>
+          <span data-patient-contact class="muted">-</span>
+          <span data-patient-status class="muted">-</span>
+        </div>
+
+        <div class="panel">
+          <div class="page-header">
+            <div>
+              <h2>Prontuario</h2>
+              <p class="muted">Historico clinico do paciente, mais recente primeiro.</p>
+            </div>
+          </div>
+          <div data-page-message hidden></div>
+          <div class="record-list" data-record-list></div>
+        </div>
+      </section>
     </main>
   </div>
-  <script type="module" src="../assets/js/pages/placeholder.js"></script>
+
+  <div class="modal" data-record-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="record-modal-title">Registro clinico</h2>
+          <p class="muted">Registros assinados ficam somente para leitura.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-record-modal>Fechar</button>
+      </div>
+
+      <div data-form-message hidden></div>
+
+      <form data-record-form class="form-grid">
+        <label class="field">
+          Tipo do registro
+          <select name="record_type" required>
+            <option value="evolution">Evolucao</option>
+            <option value="observation">Observacao</option>
+            <option value="diagnosis">Diagnostico</option>
+            <option value="conduct">Conduta</option>
+            <option value="prescription">Prescricao</option>
+            <option value="other">Outro</option>
+          </select>
+        </label>
+        <label class="field">
+          Profissional responsavel
+          <select name="professional_id" required></select>
+        </label>
+        <label class="field">
+          Data e hora
+          <input type="datetime-local" name="record_date" required>
+        </label>
+        <label class="field">
+          Titulo
+          <input name="title">
+        </label>
+        <label class="field field-full">
+          Conteudo clinico
+          <textarea name="content" required></textarea>
+        </label>
+        <label class="field field-full">
+          Diagnostico
+          <textarea name="diagnosis"></textarea>
+        </label>
+        <label class="field field-full">
+          Conduta
+          <textarea name="conduct"></textarea>
+        </label>
+        <label class="field field-full">
+          Prescricao
+          <textarea name="prescription"></textarea>
+        </label>
+        <button class="button field-full" type="submit" data-save-record>Guardar registro</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" data-view-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="view-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="view-modal-title">Detalhes do registro</h2>
+          <p class="muted" data-view-subtitle>-</p>
+        </div>
+        <button class="icon-button" type="button" data-close-view-modal>Fechar</button>
+      </div>
+      <div class="record-detail-grid" data-record-detail></div>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/paciente-detalhes.js"></script>
 </body>
 </html>

@@ -5,17 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agenda | DOZECLIN</title>
   <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/profissionais.css">
+  <link rel="stylesheet" href="../assets/css/agenda.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body>
   <div class="app-shell" data-app-shell>
     <aside class="sidebar" data-sidebar></aside>
     <main class="main">
-      <div class="mobile-bar"><strong>DOZECLIN</strong><button class="button button-secondary" type="button" data-menu-toggle>Menu</button></div>
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
       <header class="topbar" data-topbar></header>
-      <section class="content"><div class="panel"><h1>Agenda</h1><p class="muted">Modulo reservado para Sprint posterior.</p></div></section>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Agenda</h1>
+            <p>Consultas da clinica autenticada.</p>
+          </div>
+          <button class="button" type="button" data-new-appointment>Nova consulta</button>
+        </div>
+
+        <div class="panel">
+          <div data-page-message hidden></div>
+          <div class="form-grid">
+            <label class="field">
+              Data inicial
+              <input type="date" data-filter-from>
+            </label>
+            <label class="field">
+              Data final
+              <input type="date" data-filter-to>
+            </label>
+            <label class="field">
+              Profissional
+              <select data-filter-professional></select>
+            </label>
+            <label class="field">
+              Paciente
+              <select data-filter-patient></select>
+            </label>
+            <label class="field">
+              Estado
+              <select data-filter-status>
+                <option value="">Todos</option>
+                <option value="scheduled">Agendada</option>
+                <option value="confirmed">Confirmada</option>
+                <option value="in_progress">Em atendimento</option>
+                <option value="completed">Concluida</option>
+                <option value="cancelled">Cancelada</option>
+                <option value="no_show">Nao compareceu</option>
+              </select>
+            </label>
+            <div class="field">
+              <span>&nbsp;</span>
+              <button class="button button-secondary" type="button" data-apply-filters>Filtrar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="agenda-list" data-appointments-list></div>
+      </section>
     </main>
   </div>
-  <script type="module" src="../assets/js/pages/placeholder.js"></script>
+
+  <div class="modal" data-appointment-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="appointment-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="appointment-modal-title">Consulta</h2>
+          <p class="muted">Os conflitos de horario tambem sao validados no banco.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-modal>Fechar</button>
+      </div>
+
+      <div data-form-message hidden></div>
+
+      <form data-appointment-form class="form-grid">
+        <label class="field">
+          Paciente
+          <select name="patient_id" required></select>
+        </label>
+        <label class="field">
+          Profissional
+          <select name="professional_id" required></select>
+        </label>
+        <label class="field">
+          Data
+          <input type="date" name="appointment_date" required>
+        </label>
+        <label class="field">
+          Hora inicial
+          <input type="time" name="start_time" required>
+        </label>
+        <label class="field">
+          Hora final
+          <input type="time" name="end_time" required>
+        </label>
+        <label class="field">
+          Tipo
+          <select name="appointment_type">
+            <option value="first_visit">Primeira consulta</option>
+            <option value="follow_up">Consulta de acompanhamento</option>
+            <option value="assessment">Avaliacao</option>
+            <option value="return_visit">Retorno</option>
+            <option value="session">Sessao</option>
+            <option value="other">Outro</option>
+          </select>
+        </label>
+        <label class="field">
+          Estado
+          <select name="status">
+            <option value="scheduled">Agendada</option>
+            <option value="confirmed">Confirmada</option>
+            <option value="in_progress">Em atendimento</option>
+            <option value="completed">Concluida</option>
+            <option value="cancelled">Cancelada</option>
+            <option value="no_show">Nao compareceu</option>
+          </select>
+        </label>
+        <label class="field field-full">
+          Observacoes administrativas
+          <textarea name="notes"></textarea>
+        </label>
+        <button class="button field-full" type="submit">Guardar consulta</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/agenda.js"></script>
 </body>
 </html>

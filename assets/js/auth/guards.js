@@ -14,8 +14,15 @@ export async function requireAuth(requiredPermission = null) {
     return null;
   }
 
-  if (profile.clinics && !['trial', 'active'].includes(profile.clinics.status)) {
-    redirectToLogin('Clinica inativa.');
+  if (profile.role !== 'super_admin' && !profile.clinic_id) {
+    redirectToLogin('Perfil sem clinica associada.');
+    return null;
+  }
+
+  if (profile.role !== 'super_admin' && profile.clinics && !['trial', 'active'].includes(profile.clinics.status)) {
+    const unavailableUrl = new URL('acesso-indisponivel.html', window.location.href);
+    unavailableUrl.searchParams.set('status', profile.clinics.status);
+    window.location.replace(unavailableUrl.toString());
     return null;
   }
 
@@ -29,7 +36,12 @@ export async function requireAuth(requiredPermission = null) {
 
 export async function protectPage(options = {}) {
   try {
-    return await requireAuth(options.permission || null);
+    const permission =
+      typeof options === 'string'
+        ? options
+        : options.permission || null;
+
+    return await requireAuth(permission);
   } catch (error) {
     console.error('Falha ao validar sessao.', error);
     redirectToLogin('Sessao invalida.');

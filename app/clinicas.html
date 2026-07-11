@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinicas | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/profissionais.css">
+  <link rel="stylesheet" href="../assets/css/clinicas.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Clinicas</h1>
+            <p>Gestao SaaS das clinicas cliente do DOZEDEV.</p>
+          </div>
+          <button class="button" type="button" data-new-clinic>Nova clinica</button>
+        </div>
+
+        <div class="grid grid-4 clinic-metrics">
+          <article class="card metric">
+            <span>Total</span>
+            <strong data-metric-total>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Ativas</span>
+            <strong data-metric-active>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Suspensas</span>
+            <strong data-metric-suspended>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Em teste</span>
+            <strong data-metric-trial>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Canceladas</span>
+            <strong data-metric-cancelled>0</strong>
+          </article>
+        </div>
+
+        <div class="panel">
+          <div data-page-message hidden></div>
+          <div class="toolbar">
+            <input type="search" data-filter placeholder="Pesquisar por clinica, email, cidade ou administrador">
+            <select data-status-filter>
+              <option value="">Todos os estados</option>
+              <option value="trial">Em teste</option>
+              <option value="active">Ativa</option>
+              <option value="suspended">Suspensa</option>
+              <option value="cancelled">Cancelada</option>
+            </select>
+            <select data-plan-filter>
+              <option value="">Todos os planos</option>
+              <option value="basic">Basico</option>
+              <option value="professional">Profissional</option>
+              <option value="premium">Premium</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Clinica</th>
+                  <th>Administrador</th>
+                  <th>Plano</th>
+                  <th>Estado</th>
+                  <th>Utilizadores</th>
+                  <th>Acoes</th>
+                </tr>
+              </thead>
+              <tbody data-clinics-table></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" data-clinic-modal hidden>
+    <div class="modal-panel clinic-modal-panel" role="dialog" aria-modal="true" aria-labelledby="clinic-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="clinic-modal-title">Nova clinica</h2>
+          <p class="muted">O utilizador Auth do administrador sera criado manualmente no Supabase.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-modal>Fechar</button>
+      </div>
+
+      <div data-form-message hidden></div>
+
+      <form data-clinic-form class="form-grid">
+        <label class="field">
+          Nome comercial
+          <input name="name" required>
+        </label>
+        <label class="field">
+          Razao social
+          <input name="legal_name">
+        </label>
+        <label class="field">
+          Slug
+          <input name="slug" required>
+        </label>
+        <label class="field">
+          Documento fiscal
+          <input name="document">
+        </label>
+        <label class="field">
+          Email da clinica
+          <input type="email" name="email" required>
+        </label>
+        <label class="field">
+          Telefone
+          <input name="phone" inputmode="tel">
+        </label>
+        <label class="field">
+          WhatsApp
+          <input name="whatsapp" inputmode="tel">
+        </label>
+        <label class="field">
+          Cidade
+          <input name="city">
+        </label>
+        <label class="field">
+          Pais
+          <input name="country" value="Portugal">
+        </label>
+        <label class="field">
+          Codigo postal
+          <input name="postal_code">
+        </label>
+        <label class="field field-full">
+          Morada
+          <input name="address">
+        </label>
+        <label class="field">
+          Especialidade
+          <select name="specialty">
+            <option value="psychoanalysis">Psicanalise</option>
+            <option value="psychology">Psicologia</option>
+            <option value="dentistry">Odontologia</option>
+            <option value="nutrition">Nutricao</option>
+            <option value="physiotherapy">Fisioterapia</option>
+            <option value="pediatrics">Pediatria</option>
+            <option value="psychiatry">Psiquiatria</option>
+            <option value="multidisciplinary">Multidisciplinar</option>
+            <option value="general">Geral</option>
+            <option value="other">Outra</option>
+          </select>
+        </label>
+        <label class="field">
+          Plano
+          <select name="plan_code">
+            <option value="basic">Basico</option>
+            <option value="professional">Profissional</option>
+            <option value="premium">Premium</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </label>
+        <label class="field">
+          Fuso horario
+          <input name="timezone" value="Europe/Lisbon">
+        </label>
+        <label class="field">
+          Moeda
+          <input name="default_currency" value="EUR" maxlength="3">
+        </label>
+        <label class="field">
+          Cor primaria
+          <input type="color" name="primary_color" value="#7c3aed">
+        </label>
+        <label class="field">
+          Cor secundaria
+          <input type="color" name="secondary_color" value="#a855f7">
+        </label>
+        <label class="field">
+          Nome do administrador
+          <input name="admin_full_name" required>
+        </label>
+        <label class="field">
+          Email do administrador
+          <input type="email" name="admin_email" required>
+        </label>
+        <label class="field">
+          Telefone do administrador
+          <input name="admin_phone" inputmode="tel">
+        </label>
+        <button class="button field-full" type="submit">Criar clinica</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/clinicas.js"></script>
+</body>
+</html>
