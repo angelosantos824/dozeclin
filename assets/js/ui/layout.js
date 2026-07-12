@@ -2,8 +2,9 @@ import { signOut } from '../auth/auth.js';
 import { APP_NAME } from '../config/constants.js';
 
 const NAV_ITEMS = [
+  ['plataforma.html', 'Painel da Plataforma', ['super_admin'], 'platform'],
   ['dashboard.html', 'Painel'],
-  ['clinicas.html', 'Clinicas', ['super_admin']],
+  ['clinicas.html', 'Clinicas', ['super_admin'], 'platform'],
   ['pacientes.html', 'Pacientes'],
   ['agenda.html', 'Agenda'],
   ['anamnese.html', 'Anamnese'],
@@ -31,7 +32,7 @@ export function mountLayout(profile) {
 
 function buildSidebar(sidebar, profile) {
   const brand = document.createElement('a');
-  brand.href = 'dashboard.html';
+  brand.href = profile?.is_platform_user ? 'plataforma.html' : 'dashboard.html';
   brand.className = 'brand';
 
   const mark = document.createElement('span');
@@ -48,7 +49,9 @@ function buildSidebar(sidebar, profile) {
   nav.className = 'side-nav';
 
   const currentPage = window.location.pathname.split('/').pop();
-  NAV_ITEMS.forEach(([href, label, roles]) => {
+  NAV_ITEMS.forEach(([href, label, roles, scope]) => {
+    if (scope === 'platform' && !profile?.is_platform_user) return;
+    if (!scope && profile?.is_platform_user) return;
     if (roles && !roles.includes(profile?.role)) return;
     const link = document.createElement('a');
     link.href = href;
@@ -68,8 +71,8 @@ function buildSidebar(sidebar, profile) {
 function buildTopbar(topbar, profile) {
   const clinicBox = document.createElement('div');
   const clinicName = document.createElement('strong');
-  clinicName.textContent = profile?.role === 'super_admin'
-    ? 'DOZEDEV'
+  clinicName.textContent = profile?.is_platform_user
+    ? 'DOZEDEV Platform'
     : profile?.clinics?.name || 'Clinica';
   const userName = document.createElement('span');
   userName.textContent = profile?.full_name || profile?.email || 'Utilizador';

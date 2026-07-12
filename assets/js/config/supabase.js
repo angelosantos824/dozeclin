@@ -29,3 +29,18 @@ export const supabase = createClient(
     }
   }
 );
+
+export const supabaseDozedev = createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  {
+    db: {
+      schema: "dozedev"
+    },
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);

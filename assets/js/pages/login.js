@@ -1,4 +1,4 @@
-import { signIn, sendPasswordReset } from '../auth/auth.js';
+import { getCurrentProfile, signIn, sendPasswordReset } from '../auth/auth.js';
 import { isSupabaseConfigured } from '../config/supabase.js';
 import { showMessage, clearMessage } from '../ui/messages.js';
 
@@ -30,7 +30,12 @@ form?.addEventListener('submit', async (event) => {
   try {
     const { error } = await signIn(email, password);
     if (error) throw error;
-    window.location.replace('dashboard.html');
+    const profile = await getCurrentProfile();
+    if (profile?.is_platform_user) {
+      window.location.replace('plataforma.html');
+      return;
+    }
+    window.location.replace(profile?.must_change_password ? 'alterar-senha-inicial.html' : 'dashboard.html');
   } catch (error) {
     showMessage(message, 'Acesso negado. Verifique os dados informados.', 'error');
   } finally {

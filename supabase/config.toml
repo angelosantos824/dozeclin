@@ -1,0 +1,8 @@
+[functions.create-clinic-admin-access]
+verify_jwt = true
+
+[functions.reset-clinic-admin-temporary-password]
+verify_jwt = true
+
+[functions.complete-first-access-password]
+verify_jwt = true

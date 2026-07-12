@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOZEDEV Platform | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/clinicas.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZEDEV Platform</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>DOZEDEV Platform</h1>
+            <p>Administracao global dos produtos DOZEDEV.</p>
+          </div>
+          <a class="button" href="clinicas.html">Clinicas DOZECLIN</a>
+        </div>
+
+        <div class="grid grid-4 clinic-metrics">
+          <article class="card metric">
+            <span>Produtos</span>
+            <strong data-metric-products>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Ativos</span>
+            <strong data-metric-active>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Em desenvolvimento</span>
+            <strong data-metric-development>0</strong>
+          </article>
+          <article class="card metric">
+            <span>Acessos</span>
+            <strong data-metric-access>0</strong>
+          </article>
+        </div>
+
+        <div class="panel">
+          <div data-page-message hidden></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Schema</th>
+                  <th>Estado</th>
+                  <th>Acesso</th>
+                  <th>Atalho</th>
+                </tr>
+              </thead>
+              <tbody data-products-table></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../assets/js/pages/plataforma.js"></script>
+</body>
+</html>

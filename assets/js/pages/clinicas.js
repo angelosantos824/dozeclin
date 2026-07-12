@@ -1,5 +1,5 @@
 import { PERMISSIONS, hasPermission } from '../auth/permissions.js';
-import { protectPage } from '../auth/guards.js';
+import { requirePlatformSuperAdmin, requireProductAccess } from '../auth/guards.js';
 import { mountLayout } from '../ui/layout.js';
 import { appendEmptyRow, clearChildren, createCell } from '../ui/table.js';
 import { closeModal, openModal } from '../ui/modal.js';
@@ -11,19 +11,25 @@ import {
 } from '../config/constants.js';
 import {
   cancelClinic,
+  createClinicAdminAccess,
   createClinicWithAdmin,
   listClinics,
   reactivateClinic,
+  resetClinicAdminTemporaryPassword,
   suspendClinic
 } from '../services/clinics.service.js';
 
-let profile = await protectPage(PERMISSIONS.CLINICS_READ);
+let profile = await requirePlatformSuperAdmin();
 let clinics = [];
+let latestAccessData = null;
 
 if (profile) {
-  mountLayout(profile);
-  bindEvents();
-  await loadClinics();
+  profile = await requireProductAccess('dozeclin');
+  if (profile) {
+    mountLayout(profile);
+    bindEvents();
+    await loadClinics();
+  }
 }
 
 function bindEvents() {
@@ -46,6 +52,8 @@ function bindEvents() {
   });
 
   document.querySelector('[data-clinic-form]')?.addEventListener('submit', createClinic);
+  document.querySelector('[data-close-access-modal]')?.addEventListener('click', closeAccessModal);
+  document.querySelector('[data-copy-access]')?.addEventListener('click', copyAccessData);
   document.querySelector('[data-clinic-form] input[name="name"]')?.addEventListener('input', syncSlug);
   document.querySelector('[data-filter]')?.addEventListener('input', renderTable);
   document.querySelector('[data-status-filter]')?.addEventListener('change', loadClinics);
@@ -203,6 +211,14 @@ function createActionsCell(clinic) {
     cell.appendChild(actionButton('Cancelar', () => changeClinicStatus(clinic, 'cancelled'), 'danger'));
   }
 
+  if (clinic.owner?.status === 'pending_invite') {
+    cell.appendChild(actionButton('Criar acesso inicial', (event) => createInitialAccess(clinic, event.currentTarget)));
+  }
+
+  if (clinic.owner?.status === 'active') {
+    cell.appendChild(actionButton('Gerar nova senha temporaria', (event) => resetTemporaryPassword(clinic, event.currentTarget)));
+  }
+
   return cell;
 }
 
@@ -213,6 +229,67 @@ function actionButton(label, handler, variant = '') {
   button.textContent = label;
   button.addEventListener('click', handler);
   return button;
+}
+
+async function createInitialAccess(clinic, button) {
+  if (!window.confirm('Criar acesso inicial para o administrador desta clinica?')) return;
+
+  try {
+    button.disabled = true;
+    const accessData = await createClinicAdminAccess(clinic.owner.id);
+    showAccessModal(accessData);
+    await loadClinics();
+  } catch (error) {
+    console.error('Falha ao criar acesso inicial.', error);
+    showMessage(document.querySelector('[data-page-message]'), 'Nao foi possivel criar o acesso inicial.', 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function resetTemporaryPassword(clinic, button) {
+  if (!window.confirm('Gerar nova senha temporaria para este administrador?')) return;
+
+  try {
+    button.disabled = true;
+    const accessData = await resetClinicAdminTemporaryPassword(clinic.owner.id);
+    showAccessModal(accessData);
+    await loadClinics();
+  } catch (error) {
+    console.error('Falha ao gerar nova senha temporaria.', error);
+    showMessage(document.querySelector('[data-page-message]'), 'Nao foi possivel gerar a senha temporaria.', 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function showAccessModal(accessData) {
+  latestAccessData = accessData;
+  document.querySelector('[data-access-clinic]').textContent = accessData.clinic_name || '-';
+  document.querySelector('[data-access-admin]').textContent = accessData.admin_name || '-';
+  document.querySelector('[data-access-email]').textContent = accessData.email || '-';
+  document.querySelector('[data-access-password]').textContent = accessData.temporary_password || '-';
+  openModal(document.querySelector('[data-access-modal]'));
+}
+
+function closeAccessModal() {
+  latestAccessData = null;
+  document.querySelector('[data-access-password]').textContent = '';
+  closeModal(document.querySelector('[data-access-modal]'));
+}
+
+async function copyAccessData() {
+  if (!latestAccessData) return;
+  const text = [
+    'Sistema: DOZECLIN',
+    `Endereco de acesso: ${window.location.origin}${window.location.pathname.replace(/clinicas\.html$/, 'login.html')}`,
+    `Email: ${latestAccessData.email}`,
+    `Senha temporaria: ${latestAccessData.temporary_password}`,
+    'Aviso: no primeiro acesso sera obrigatorio criar uma nova senha.'
+  ].join('\n');
+
+  await navigator.clipboard.writeText(text);
+  showMessage(document.querySelector('[data-page-message]'), 'Dados de acesso copiados.', 'success');
 }
 
 async function createClinic(event) {

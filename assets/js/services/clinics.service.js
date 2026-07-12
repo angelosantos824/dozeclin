@@ -112,6 +112,28 @@ export async function createClinicWithAdmin(data) {
   return created;
 }
 
+export async function createClinicAdminAccess(profileId) {
+  await requireSuperAdmin();
+
+  const { data, error } = await supabase.functions.invoke('create-clinic-admin-access', {
+    body: { profile_id: profileId }
+  });
+
+  if (error) throw await mapFunctionError(error);
+  return data;
+}
+
+export async function resetClinicAdminTemporaryPassword(profileId) {
+  await requireSuperAdmin();
+
+  const { data, error } = await supabase.functions.invoke('reset-clinic-admin-temporary-password', {
+    body: { profile_id: profileId }
+  });
+
+  if (error) throw await mapFunctionError(error);
+  return data;
+}
+
 export async function getClinicAdmin(clinicId) {
   await requireSuperAdmin();
 
@@ -162,10 +184,27 @@ async function updateClinicStatus(clinicId, status, reason) {
 
 async function requireSuperAdmin() {
   const profile = await getCurrentProfile();
-  if (!profile || profile.role !== 'super_admin' || profile.status !== 'active') {
+  if (!profile || !profile.is_platform_user || profile.role !== 'super_admin' || profile.status !== 'active') {
     throw new Error('Apenas administradores do produto podem executar esta acao.');
   }
   return profile;
+}
+
+async function mapFunctionError(error) {
+  let message = null;
+
+  if (error?.context instanceof Response) {
+    try {
+      const payload = await error.context.json();
+      message = typeof payload?.error === 'string' ? payload.error : null;
+    } catch (_parseError) {
+      message = null;
+    }
+  } else if (typeof error?.context?.error === 'string') {
+    message = error.context.error;
+  }
+
+  return new Error(message || error?.message || 'Nao foi possivel executar a operacao.');
 }
 
 export async function getClinicSettings(clinicId) {

@@ -15,7 +15,9 @@ A Sprint 2.5 adiciona a gestao SaaS de clinicas cliente pelo painel Super Admin 
 
 ## Associacao manual do Auth
 
-Depois de criar o utilizador no Supabase Auth, execute uma atualizacao controlada no schema `dozeclin`:
+O fluxo preferencial agora e usar a acao `Criar acesso inicial` no painel de clinicas. Ela chama uma Edge Function segura, cria o utilizador Auth, vincula `auth_user_id` e retorna uma senha temporaria exibida uma unica vez.
+
+O processo manual abaixo fica apenas como alternativa operacional controlada:
 
 ```sql
 update dozeclin.profiles
@@ -67,8 +69,8 @@ Nenhum destes fluxos apaga pacientes, profissionais, consultas ou prontuarios.
 
 ## Limitacoes atuais
 
-- Convite automatico por email ainda nao existe.
-- A associacao do `auth_user_id` ainda e manual.
+- Convite automatico por email ainda nao e obrigatorio.
+- A senha temporaria e exibida uma unica vez; se for perdida, gere uma nova senha temporaria.
 - Contagens exibidas no painel usam dados administrativos de perfis; conteudo clinico nao e listado pelo Super Admin.
 - Planos sao apenas codigos internos nesta Sprint, sem cobranca automatica.
 

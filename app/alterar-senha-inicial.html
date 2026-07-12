@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alterar senha inicial | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body class="auth-page">
+  <main class="auth-panel">
+    <h1>Definir nova senha</h1>
+    <p>Crie uma senha definitiva para concluir o primeiro acesso.</p>
+
+    <div data-message aria-live="polite" hidden></div>
+
+    <form data-initial-password-form class="grid">
+      <label class="field">
+        Nova senha
+        <input type="password" name="password" autocomplete="new-password" required>
+      </label>
+      <label class="field">
+        Confirmar nova senha
+        <input type="password" name="confirm_password" autocomplete="new-password" required>
+      </label>
+      <label class="field">
+        <span>
+          <input type="checkbox" data-toggle-password>
+          Mostrar senha
+        </span>
+      </label>
+      <p class="muted">Minimo de 10 caracteres, com maiuscula, minuscula, numero e simbolo.</p>
+      <button class="button" type="submit">Definir nova senha</button>
+      <button class="button button-secondary" type="button" data-logout>Sair</button>
+    </form>
+  </main>
+
+  <script type="module" src="../assets/js/pages/alterar-senha-inicial.js"></script>
+</body>
+</html>

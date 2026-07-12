@@ -25,7 +25,7 @@
         </div>
 
         <div class="panel">
-          <div data-message hidden></div>
+          <div data-message aria-live="polite" hidden></div>
           <form data-settings-form class="form-grid">
             <label class="field">
               Nome da clinica
@@ -111,7 +111,7 @@
               Rodape
               <textarea name="footer_text"></textarea>
             </label>
-            <button class="button field-full" type="submit">Guardar configuracoes</button>
+            <button class="button field-full" type="submit" data-save-settings>Guardar configuracoes</button>
           </form>
         </div>
       </section>

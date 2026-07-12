@@ -24,3 +24,13 @@
   background: #f2f4f7;
   color: var(--muted);
 }
+
+.access-box {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.access-box p {
+  margin: 0;
+}

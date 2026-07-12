@@ -12,6 +12,9 @@ export const PERMISSIONS = {
   MEDICAL_RECORDS_UPDATE: 'medical_records.update',
   MEDICAL_RECORDS_SIGN: 'medical_records.sign',
   MEDICAL_RECORDS_CANCEL: 'medical_records.cancel',
+  PLATFORM_READ: 'platform.read',
+  PLATFORM_PRODUCTS_READ: 'platform.products.read',
+  PLATFORM_USERS_READ: 'platform.users.read',
   CLINICS_READ: 'clinics.read',
   CLINICS_CREATE: 'clinics.create',
   CLINICS_UPDATE: 'clinics.update',
@@ -82,5 +85,18 @@ const ROLE_PERMISSIONS = {
 
 export function hasPermission(profile, permission) {
   if (!profile || !permission) return false;
+  if (profile.is_platform_user && profile.role === 'super_admin') {
+    return [
+      PERMISSIONS.PLATFORM_READ,
+      PERMISSIONS.PLATFORM_PRODUCTS_READ,
+      PERMISSIONS.PLATFORM_USERS_READ,
+      PERMISSIONS.CLINICS_READ,
+      PERMISSIONS.CLINICS_CREATE,
+      PERMISSIONS.CLINICS_UPDATE,
+      PERMISSIONS.CLINICS_SUSPEND,
+      PERMISSIONS.CLINICS_CANCEL
+    ].includes(permission);
+  }
+
   return (ROLE_PERMISSIONS[profile.role] || []).includes(permission);
 }

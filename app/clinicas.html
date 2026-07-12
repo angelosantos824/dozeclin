@@ -204,6 +204,28 @@
     </div>
   </div>
 
+  <div class="modal" data-access-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="access-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="access-modal-title">Acesso inicial criado</h2>
+          <p class="muted">Esta senha sera exibida somente agora.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-access-modal>Fechar</button>
+      </div>
+
+      <div class="access-box">
+        <p><strong>Clinica:</strong> <span data-access-clinic></span></p>
+        <p><strong>Administrador:</strong> <span data-access-admin></span></p>
+        <p><strong>Email:</strong> <span data-access-email></span></p>
+        <p><strong>Senha temporaria:</strong> <span data-access-password></span></p>
+        <p class="muted">No primeiro acesso sera obrigatorio criar uma nova senha.</p>
+      </div>
+
+      <button class="button" type="button" data-copy-access>Copiar dados de acesso</button>
+    </div>
+  </div>
+
   <script type="module" src="../assets/js/pages/clinicas.js"></script>
 </body>
 </html>
