@@ -29,7 +29,7 @@
         <div class="panel">
           <div class="toolbar">
             <input type="search" data-filter placeholder="Pesquisar por nome, email, telefone ou documento">
-            <span class="muted" data-page-status>A carregar...</span>
+            <span class="muted" data-page-status role="status" aria-live="polite">A carregar...</span>
           </div>
 
           <div class="table-wrap">
@@ -61,7 +61,7 @@
         <button class="icon-button" type="button" data-close-modal>Fechar</button>
       </div>
 
-      <div data-form-message hidden></div>
+      <div data-form-message aria-live="polite" hidden></div>
 
       <form data-patient-form class="form-grid">
         <label class="field">

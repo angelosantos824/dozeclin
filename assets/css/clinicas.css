@@ -15,16 +15,6 @@
   display: block;
 }
 
-.status-trial {
-  background: #eef7fb;
-  color: var(--primary);
-}
-
-.status-cancelled {
-  background: #f2f4f7;
-  color: var(--muted);
-}
-
 .access-box {
   display: grid;
   gap: 8px;

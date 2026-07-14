@@ -23,7 +23,7 @@
           <div>
             <a href="pacientes.html" class="muted">Voltar para pacientes</a>
             <h1 data-patient-name>Paciente</h1>
-            <p data-patient-meta>Carregando dados do paciente...</p>
+            <p data-patient-meta>A carregar dados do paciente...</p>
           </div>
           <button class="button" type="button" data-new-record>Novo registro</button>
         </div>
@@ -41,7 +41,7 @@
               <p class="muted">Historico clinico do paciente, mais recente primeiro.</p>
             </div>
           </div>
-          <div data-page-message hidden></div>
+          <div data-page-message aria-live="polite" hidden></div>
           <div class="record-list" data-record-list></div>
         </div>
       </section>
@@ -58,7 +58,7 @@
         <button class="icon-button" type="button" data-close-record-modal>Fechar</button>
       </div>
 
-      <div data-form-message hidden></div>
+      <div data-form-message aria-live="polite" hidden></div>
 
       <form data-record-form class="form-grid">
         <label class="field">
