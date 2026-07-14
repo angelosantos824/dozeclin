@@ -56,12 +56,12 @@ Nenhum destes fluxos apaga pacientes, profissionais, consultas ou prontuarios.
 7. Confirme que o administrador da primeira clinica e bloqueado na tela `acesso-indisponivel.html`.
 8. Confirme que o Super Admin continua acessando `app/clinicas.html`.
 
-## Exemplo para clinica psicanalista
+## Exemplo para clinica
 
 1. Abra `app/clinicas.html` com um perfil `super_admin`.
 2. Clique em `Nova clinica`.
 3. Informe nome, email, cidade e documento quando existir.
-4. Escolha `Psicanalise` em especialidade.
+4. Escolha a especialidade adequada.
 5. Escolha o plano inicial.
 6. Informe nome e email do administrador.
 7. Guarde a clinica.

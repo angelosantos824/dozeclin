@@ -1,6 +1,19 @@
 
 node_modules/
 supabase/.temp/
+
 .env
 .env.*
 !.env.example
+
+.vscode/settings.json
+
+*.log
+*.tmp
+*.bak
+*.diff
+*.patch
+*~
+
+.DS_Store
+Thumbs.db

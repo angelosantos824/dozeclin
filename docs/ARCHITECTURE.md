@@ -2,26 +2,11 @@
 
 ## Objetivo
 
-Transformar a copia independente do sistema anterior em uma fundacao SaaS multi-tenant chamada DOZECLIN.
+Manter uma fundacao SaaS multi-tenant chamada DOZECLIN.
 
 O desenvolvimento usa o projeto Supabase compartilhado do DOZEDEV, com isolamento por schema PostgreSQL. Nenhuma tabela exclusiva do DOZECLIN deve ser criada no schema `public`.
 
 ## Estrutura atual
-
-Arquivos legados preservados na raiz:
-
-- `adm.html`
-- `adm-script.js`
-- `detalhes-cliente.html`
-- `anamnese.html`
-- `area-cliente.html`
-- `tarefa-7-dias.html`
-- `config.js`
-- `script.js`
-- `style.css`
-- paginas publicas antigas
-
-Nova fundacao:
 
 - `app/`: paginas internas DOZECLIN.
 - `assets/css/`: estilos da aplicacao.
@@ -60,7 +45,7 @@ Buckets previstos:
 
 Documentos clinicos devem ficar separados de arquivos publicos do DOZEDEV.
 
-## Modulos da Sprint 1
+## Modulos principais
 
 - Autenticacao.
 - Dashboard.
@@ -70,7 +55,7 @@ Documentos clinicos devem ficar separados de arquivos publicos do DOZEDEV.
 - Prontuario clinico inicial.
 - Configuracoes da clinica.
 
-## Modulos preservados para Sprints posteriores
+## Modulos em evolucao
 
 - Anamnese.
 - Tarefas.

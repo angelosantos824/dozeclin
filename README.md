@@ -1,88 +1,75 @@
 # DOZECLIN
 
-DOZECLIN e a nova aplicacao comercial de gestao para clinicas e profissionais de saude.
+DOZECLIN e um SaaS de gestao para clinicas e profissionais de saude, integrado ao ecossistema DOZEDEV. A aplicacao usa autenticacao Supabase, isolamento multiempresa, Super Admin global, onboarding de clinicas, primeiro acesso com senha temporaria e modulos operacionais para pacientes, agenda, profissionais, prontuario clinico e configuracoes.
 
-Esta pasta e uma copia independente do projeto anterior da Michelly. Os arquivos legados permanecem intactos na raiz para comparacao, e a nova fundacao tecnica fica em:
+## Arquitetura
 
-- `app/`
-- `assets/`
-- `supabase/`
-- `docs/`
+- `app/`: paginas HTML da aplicacao.
+- `assets/css/`: estilos compartilhados e por modulo.
+- `assets/js/auth/`: autenticacao, guards e permissoes.
+- `assets/js/config/`: constantes e cliente Supabase.
+- `assets/js/pages/`: controladores das paginas.
+- `assets/js/services/`: camada de acesso a dados.
+- `assets/js/ui/`: componentes e utilitarios de interface.
+- `docs/`: documentacao tecnica.
+- `supabase/functions/`: Edge Functions.
+- `supabase/migrations/`: SQL versionado.
+- `supabase/policies/`: notas de policies.
+- `tools/`: ferramentas locais.
 
-## Execucao local
+## Desenvolvimento local
 
-Por usar ES Modules no navegador, abra a aplicacao por um servidor local:
+Instale as dependencias:
+
+```bash
+npm install
+```
+
+Inicie o servidor estatico local:
 
 ```bash
 node tools/static-server.js
 ```
 
-Depois acesse:
+Acesse:
 
 ```text
-http://localhost:8000/app/login.html
+http://127.0.0.1:8000/app/login.html
 ```
 
-## Configurar Supabase
+## Supabase
 
-O ambiente de desenvolvimento utiliza o projeto Supabase compartilhado do DOZEDEV, com isolamento no schema `dozeclin`.
+O frontend usa apenas a anon key configurada em `assets/js/config/constants.js`. Nunca versione `.env`, `service_role`, JWTs, tokens ou segredos operacionais.
 
-1. Use a URL e a anon key do projeto Supabase compartilhado do DOZEDEV.
-2. Atualize `assets/js/config/constants.js`.
-3. Execute manualmente a migration em `supabase/migrations/20260711160000_dozeclin_sprint1_foundation.sql`.
-4. No Supabase Dashboard, exponha o schema `dozeclin` na Data API.
-5. Nunca use `service_role` no frontend.
+Migrations ficam em `supabase/migrations/` e devem ser revisadas antes de qualquer aplicacao. Para usar a CLI:
 
-Para expor o schema:
-
-```text
-Supabase Dashboard
-Project Settings
-Data API
-Exposed schemas
-Adicionar dozeclin
+```bash
+npx supabase migration list
+npx supabase db push
 ```
 
-A migration concede `usage` no schema para `anon`, `authenticated` e `service_role`, mas as tabelas operacionais ficam controladas por RLS. O frontend usa apenas a anon key.
+Edge Functions ficam em `supabase/functions/`. O deploy deve ser feito somente em fluxo controlado:
 
-Ambientes de producao podem futuramente usar Supabase exclusivo, PostgreSQL proprio, Supabase self-hosted ou backend Node com outro banco.
+```bash
+npx supabase functions deploy create-clinic-admin-access
+npx supabase functions deploy complete-first-access-password
+npx supabase functions deploy reset-clinic-admin-temporary-password
+```
 
-## Primeira clinica e primeiro administrador
+## Fluxos principais
 
-1. Crie o utilizador em Supabase Auth.
-2. Insira um registro em `dozeclin.clinics`.
-3. Insira um registro em `dozeclin.profiles` com o `id` do utilizador Auth, o `clinic_id` criado e `role = 'clinic_admin'`.
-4. Entre em `app/login.html`.
+- Super Admin global acessa a DOZEDEV Platform e administra clinicas.
+- Clinicas possuem dados isolados por `clinic_id` e RLS.
+- Administrador da clinica recebe acesso inicial com senha temporaria.
+- Primeiro acesso exige troca obrigatoria de senha.
+- Usuarios operacionais acessam os modulos permitidos da propria clinica.
 
-## Sprint 1
+## Fluxo basico de desenvolvimento
 
-Implementado nesta etapa:
+1. Atualize codigo em `app/`, `assets/`, `docs/`, `supabase/` ou `tools/`.
+2. Rode o servidor local com `node tools/static-server.js`.
+3. Valide login e navegacao pelos modulos afetados.
+4. Use `node --check` nos JavaScripts alterados.
+5. Revise `git status` e `git diff` antes de abrir revisao.
 
-- Cliente Supabase modular.
-- Login, logout e recuperacao de senha via Supabase Auth.
-- Protecao de paginas internas.
-- Layout administrativo DOZECLIN.
-- Dashboard inicial.
-- Modulo inicial de pacientes.
-- Modulo de profissionais.
-- Agenda simples e consultas.
-- Prontuario clinico inicial.
-- Configuracoes basicas da clinica.
-- Migration com tabelas-base e RLS inicial.
-- Documentacao tecnica.
-
-Nao implementado nesta Sprint:
-
-- Assinatura digital de prontuario.
-- Adendos de registros assinados.
-- Anamnese migrada.
-- Tarefas do paciente.
-- Financeiro migrado.
-- Area do paciente.
-- Criacao automatica de utilizador Auth para profissional.
-- Dados reais da Michelly.
-- Deploy.
-
-## Testes
-
-Consulte `docs/SPRINTS.md` para o checklist. Nao ha testes automatizados nesta base ainda.
+Consulte `docs/SPRINTS.md` para checklists por Sprint.
