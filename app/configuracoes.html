@@ -25,6 +25,32 @@
         </div>
 
         <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Identidade visual</h2>
+              <p>Logotipo institucional utilizado no sistema, Portal do Paciente e documentos.</p>
+            </div>
+          </div>
+          <div class="branding-settings">
+            <div class="clinic-logo-preview" data-logo-preview>
+              <span data-logo-monogram>D</span>
+              <img data-logo-image alt="Logotipo da clinica" hidden>
+            </div>
+            <div class="branding-settings-body">
+              <label class="field">
+                Logotipo da clinica
+                <input type="file" name="clinic_logo" accept="image/png,image/jpeg,image/webp" data-logo-file>
+              </label>
+              <p class="form-help">Utilize uma imagem com fundo transparente sempre que possivel. Formato recomendado: PNG ou WEBP. Tamanho maximo: 2 MB.</p>
+              <div class="form-actions">
+                <button class="button" type="button" data-save-logo>Guardar logotipo</button>
+                <button class="button button-secondary" type="button" data-remove-logo>Remover logotipo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
           <div data-message aria-live="polite" hidden></div>
           <form data-settings-form class="form-grid">
             <label class="field">

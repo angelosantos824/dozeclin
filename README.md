@@ -63,6 +63,8 @@ npx supabase functions deploy reset-clinic-admin-temporary-password
 - Administrador da clinica recebe acesso inicial com senha temporaria.
 - Primeiro acesso exige troca obrigatoria de senha.
 - Usuarios operacionais acessam os modulos permitidos da propria clinica.
+- Financeiro clinico documentado em `docs/FINANCIAL.md`.
+- Assinaturas, validacao publica e rastreabilidade documental em `docs/DOCUMENT-SIGNATURES-VALIDATION.md`.
 
 ## Fluxo basico de desenvolvimento
 

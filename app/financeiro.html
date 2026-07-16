@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Financeiro | DOZECLIN</title>
   <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/financeiro.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body>
@@ -17,18 +18,246 @@
       </div>
       <header class="topbar" data-topbar></header>
       <section class="content">
-        <div class="page-header">
+        <div class="page-header financial-header">
           <div>
             <h1>Financeiro</h1>
-            <p>Modulo reservado para Sprint posterior.</p>
+            <p>Cobrancas, pagamentos, recibos e fluxo de caixa clinico.</p>
+          </div>
+          <div class="financial-actions">
+            <button class="button button-secondary" type="button" data-refresh-financial>Atualizar</button>
+            <button class="button" type="button" data-new-charge>Nova cobranca</button>
           </div>
         </div>
-        <div class="panel">
-          <p class="muted">Nenhum painel financeiro esta disponivel nesta Sprint.</p>
+
+        <div data-page-message aria-live="polite" hidden></div>
+
+        <section class="financial-summary-grid" data-financial-summary></section>
+
+        <div class="financial-tabs" role="tablist" aria-label="Financeiro">
+          <button class="financial-tab is-active" type="button" data-tab-button="charges">Cobrancas</button>
+          <button class="financial-tab" type="button" data-tab-button="payments">Pagamentos</button>
+          <button class="financial-tab" type="button" data-tab-button="receipts">Recibos</button>
+          <button class="financial-tab" type="button" data-tab-button="cashflow">Fluxo de caixa</button>
         </div>
+
+        <section class="financial-panel" data-tab-panel="charges">
+          <div class="financial-panel-header">
+            <div>
+              <h2>Cobrancas</h2>
+              <p class="muted">Valores em aberto, parciais, pagos e cancelados.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Descricao</th>
+                  <th>Appointment</th>
+                  <th>Vencimento</th>
+                  <th>Moeda</th>
+                  <th>Valor</th>
+                  <th>Pago</th>
+                  <th>Saldo</th>
+                  <th>Status</th>
+                  <th>Acoes</th>
+                </tr>
+              </thead>
+              <tbody data-charges-table></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="financial-panel" data-tab-panel="payments" hidden>
+          <h2>Pagamentos</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Cobranca</th>
+                  <th>Data</th>
+                  <th>Metodo</th>
+                  <th>Moeda</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Documento</th>
+                </tr>
+              </thead>
+              <tbody data-payments-table></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="financial-panel" data-tab-panel="receipts" hidden>
+          <h2>Recibos</h2>
+          <p class="muted">Recibo de pagamento simples. Nao substitui documento fiscal oficial.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Numero</th>
+                  <th>Paciente</th>
+                  <th>Cobranca</th>
+                  <th>Emitido em</th>
+                  <th>Moeda</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Documento</th>
+                </tr>
+              </thead>
+              <tbody data-receipts-table></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="financial-panel" data-tab-panel="cashflow" hidden>
+          <h2>Fluxo de caixa</h2>
+          <p class="muted">Entradas confirmadas por moeda. Despesas ficam para Sprint futura.</p>
+          <div class="financial-cashflow-grid" data-cashflow-grid></div>
+        </section>
       </section>
     </main>
   </div>
-  <script type="module" src="../assets/js/pages/placeholder.js"></script>
+
+  <div class="modal" data-charge-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="charge-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="charge-modal-title">Nova cobranca</h2>
+          <p class="muted">A clinica e definida pelo perfil autenticado.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-charge-modal>Fechar</button>
+      </div>
+      <div data-charge-message aria-live="polite" hidden></div>
+      <form class="form-grid" data-charge-form>
+        <label class="field">
+          Paciente
+          <select name="patient_id" required></select>
+        </label>
+        <label class="field">
+          Tipo
+          <select name="charge_type" required>
+            <option value="manual">Manual</option>
+            <option value="appointment">Atendimento</option>
+            <option value="package">Pacote</option>
+            <option value="subscription">Assinatura</option>
+            <option value="adjustment">Ajuste</option>
+          </select>
+        </label>
+        <label class="field field-full">
+          Atendimento opcional
+          <select name="appointment_id"></select>
+        </label>
+        <label class="field field-full">
+          Descricao
+          <input name="description" required maxlength="160">
+        </label>
+        <label class="field">
+          Moeda
+          <select name="currency" required></select>
+        </label>
+        <label class="field">
+          Valor
+          <input type="number" name="amount" min="0.01" step="0.01" required>
+        </label>
+        <label class="field">
+          Desconto
+          <input type="number" name="discount_amount" min="0" step="0.01" value="0">
+        </label>
+        <label class="field">
+          Vencimento
+          <input type="date" name="due_date">
+        </label>
+        <label class="field field-full">
+          Observacoes
+          <textarea name="notes"></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-charge-modal>Cancelar</button>
+          <button class="button" type="submit">Criar cobranca</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" data-payment-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="payment-modal-title">Registar pagamento</h2>
+          <p class="muted" data-payment-subtitle>-</p>
+        </div>
+        <button class="icon-button" type="button" data-close-payment-modal>Fechar</button>
+      </div>
+      <div data-payment-message aria-live="polite" hidden></div>
+      <form class="form-grid" data-payment-form>
+        <input type="hidden" name="charge_id">
+        <label class="field">
+          Saldo atual
+          <input name="remaining_amount" readonly>
+        </label>
+        <label class="field">
+          Valor
+          <input type="number" name="amount" min="0.01" step="0.01" required>
+        </label>
+        <label class="field">
+          Metodo
+          <select name="payment_method" required>
+            <option value="cash">Dinheiro</option>
+            <option value="bank_transfer">Transferencia bancaria</option>
+            <option value="card">Cartao</option>
+            <option value="pix">PIX</option>
+            <option value="mb_way">MB Way</option>
+            <option value="stripe">Stripe</option>
+            <option value="paypal">PayPal</option>
+            <option value="other">Outro</option>
+          </select>
+        </label>
+        <label class="field">
+          Data do pagamento
+          <input type="datetime-local" name="payment_date" required>
+        </label>
+        <label class="field">
+          Referencia
+          <input name="external_reference">
+        </label>
+        <label class="field field-full">
+          Observacoes
+          <textarea name="notes"></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-payment-modal>Cancelar</button>
+          <button class="button" type="submit">Registar pagamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" data-cancel-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="cancel-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="cancel-modal-title">Cancelar cobranca</h2>
+          <p class="muted">Nao e possivel cancelar cobrancas com pagamento confirmado sem estorno.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-cancel-modal>Fechar</button>
+      </div>
+      <div data-cancel-message aria-live="polite" hidden></div>
+      <form class="form-grid" data-cancel-form>
+        <input type="hidden" name="charge_id">
+        <label class="field field-full">
+          Motivo
+          <textarea name="reason" required></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-cancel-modal>Cancelar</button>
+          <button class="button button-danger" type="submit">Confirmar cancelamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/financeiro.js"></script>
 </body>
 </html>

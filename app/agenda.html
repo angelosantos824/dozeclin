@@ -24,58 +24,95 @@
             <h1>Agenda</h1>
             <p>Consultas da clinica autenticada.</p>
           </div>
-          <button class="button" type="button" data-new-appointment>Nova consulta</button>
-        </div>
-
-        <div class="panel">
-          <div data-page-message aria-live="polite" hidden></div>
-          <div class="form-grid">
-            <label class="field">
-              Data inicial
-              <input type="date" data-filter-from>
-            </label>
-            <label class="field">
-              Data final
-              <input type="date" data-filter-to>
-            </label>
-            <label class="field">
-              Profissional
-              <select data-filter-professional></select>
-            </label>
-            <label class="field">
-              Paciente
-              <select data-filter-patient></select>
-            </label>
-            <label class="field">
-              Estado
-              <select data-filter-status>
-                <option value="">Todos</option>
-                <option value="scheduled">Agendada</option>
-                <option value="confirmed">Confirmada</option>
-                <option value="in_progress">Em atendimento</option>
-                <option value="completed">Concluida</option>
-                <option value="cancelled">Cancelada</option>
-                <option value="no_show">Nao compareceu</option>
-              </select>
-            </label>
-            <div class="field">
-              <span>&nbsp;</span>
-              <button class="button button-secondary" type="button" data-apply-filters>Filtrar</button>
-            </div>
+          <div class="page-actions">
+            <button class="button button-secondary" type="button" data-open-filters>Filtrar</button>
+            <button class="button" type="button" data-new-appointment>Agendar Sessao</button>
           </div>
         </div>
+        <div data-page-message aria-live="polite" hidden></div>
+        <div class="active-filter-summary" data-active-filters hidden></div>
 
-        <div class="agenda-list" data-appointments-list></div>
+        <div class="agenda-workspace">
+          <div class="agenda-list" data-appointments-list></div>
+          <aside class="panel agenda-day-panel">
+            <div class="agenda-day-header">
+              <div>
+                <h2>Hoje</h2>
+                <p class="muted" data-today-label>-</p>
+              </div>
+            </div>
+            <div class="agenda-day-list" data-day-agenda></div>
+            <button class="button button-secondary button-sm" type="button" data-focus-today>Ver agenda completa</button>
+          </aside>
+        </div>
       </section>
     </main>
+  </div>
+
+  <div class="modal" data-filters-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="filters-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="filters-modal-title">Filtrar agenda</h2>
+          <p class="muted">Ajuste a visualizacao sem sair da agenda.</p>
+        </div>
+        <button class="icon-button" type="button" data-cancel-filters>Fechar</button>
+      </div>
+
+      <form data-filters-form class="form-grid">
+        <label class="field">
+          Data inicial
+          <input type="date" name="from">
+        </label>
+        <label class="field">
+          Data final
+          <input type="date" name="to">
+        </label>
+        <label class="field">
+          Profissional
+          <select name="professional_id"></select>
+        </label>
+        <label class="field">
+          Paciente
+          <select name="patient_id"></select>
+        </label>
+        <label class="field">
+          Estado
+          <select name="status_group">
+            <option value="active">Ativas</option>
+            <option value="scheduled">Agendadas</option>
+            <option value="confirmed">Confirmadas</option>
+            <option value="checked_in">Aguardando atendimento</option>
+            <option value="in_progress">Em atendimento</option>
+            <option value="completed">Concluidas</option>
+            <option value="rescheduled">Remarcadas</option>
+            <option value="cancelled">Canceladas</option>
+            <option value="no_show">Nao compareceram</option>
+            <option value="all">Todas</option>
+          </select>
+        </label>
+        <label class="field checkbox-field">
+          <span>&nbsp;</span>
+          <span class="inline-check">
+            <input type="checkbox" name="show_history">
+            Mostrar historico
+          </span>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-clear-filters>Limpar filtros</button>
+          <button class="button button-secondary" type="button" data-cancel-filters>Cancelar</button>
+          <button class="button" type="submit">Aplicar filtros</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div class="modal" data-appointment-modal hidden>
     <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="appointment-modal-title">
       <div class="modal-header">
         <div>
-          <h2 id="appointment-modal-title">Consulta</h2>
-          <p class="muted">Os conflitos de horario tambem sao validados no banco.</p>
+          <h2 id="appointment-modal-title">Agendar Sessao</h2>
+          <p class="muted">A agenda usa o timezone IANA da clinica e converte para timestamp no banco.</p>
         </div>
         <button class="icon-button" type="button" data-close-modal>Fechar</button>
       </div>
@@ -92,44 +129,131 @@
           <select name="professional_id" required></select>
         </label>
         <label class="field">
+          Modalidade
+          <select name="modality" required>
+            <option value="presential">Presencial</option>
+            <option value="online">Online</option>
+            <option value="home">Domiciliar</option>
+          </select>
+        </label>
+        <label class="field">
           Data
           <input type="date" name="appointment_date" required>
         </label>
         <label class="field">
-          Hora inicial
+          Hora
           <input type="time" name="start_time" required>
         </label>
         <label class="field">
-          Hora final
-          <input type="time" name="end_time" required>
+          Duracao
+          <input type="number" name="expected_duration" min="1" max="720" step="5" value="50" required>
         </label>
         <label class="field">
-          Tipo
-          <select name="appointment_type">
-            <option value="first_visit">Primeira consulta</option>
-            <option value="follow_up">Consulta de acompanhamento</option>
-            <option value="assessment">Avaliacao</option>
-            <option value="return_visit">Retorno</option>
-            <option value="session">Sessao</option>
-            <option value="other">Outro</option>
-          </select>
+          Timezone da Clinica
+          <input name="clinic_timezone" list="timezone-options" required>
         </label>
         <label class="field">
-          Estado
-          <select name="status">
-            <option value="scheduled">Agendada</option>
-            <option value="confirmed">Confirmada</option>
-            <option value="in_progress">Em atendimento</option>
-            <option value="completed">Concluida</option>
-            <option value="cancelled">Cancelada</option>
-            <option value="no_show">Nao compareceu</option>
-          </select>
+          Timezone do Paciente
+          <input name="patient_timezone_snapshot" list="timezone-options" required>
+        </label>
+        <datalist id="timezone-options" data-timezone-options></datalist>
+        <label class="field">
+          Link da reuniao
+          <input type="url" name="meeting_url" placeholder="https://meet.google.com/...">
+        </label>
+        <label class="field">
+          Sala
+          <input name="room">
         </label>
         <label class="field field-full">
-          Observacoes administrativas
-          <textarea name="notes"></textarea>
+          Observacoes para o paciente
+          <textarea name="public_notes"></textarea>
         </label>
-        <button class="button field-full" type="submit">Guardar consulta</button>
+        <label class="field field-full">
+          Observacoes internas
+          <textarea name="internal_notes"></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-modal>Cancelar</button>
+          <button class="button" type="submit">Agendar Sessao</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" data-reschedule-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="reschedule-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="reschedule-modal-title">Reagendar Sessao</h2>
+          <p class="muted">A sessao atual sera marcada como remarcada e uma nova sessao sera criada.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-reschedule-modal>Fechar</button>
+      </div>
+
+      <div data-reschedule-message aria-live="polite" hidden></div>
+
+      <form data-reschedule-form class="form-grid">
+        <label class="field">
+          Paciente
+          <input name="patient_name" readonly>
+        </label>
+        <label class="field">
+          Profissional
+          <select name="professional_id" required></select>
+        </label>
+        <label class="field">
+          Modalidade
+          <select name="modality" required>
+            <option value="presential">Presencial</option>
+            <option value="online">Online</option>
+            <option value="home">Domiciliar</option>
+          </select>
+        </label>
+        <label class="field">
+          Nova data
+          <input type="date" name="appointment_date" required>
+        </label>
+        <label class="field">
+          Nova hora
+          <input type="time" name="start_time" required>
+        </label>
+        <label class="field">
+          Duracao
+          <input type="number" name="expected_duration" min="1" max="720" step="5" required>
+        </label>
+        <label class="field">
+          Timezone da Clinica
+          <input name="clinic_timezone" readonly>
+        </label>
+        <label class="field">
+          Timezone do Paciente
+          <input name="patient_timezone_snapshot" readonly>
+        </label>
+        <label class="field">
+          Link da reuniao
+          <input type="url" name="meeting_url" placeholder="https://meet.google.com/...">
+        </label>
+        <label class="field">
+          Sala
+          <input name="room">
+        </label>
+        <label class="field field-full">
+          Observacoes para o paciente
+          <textarea name="public_notes"></textarea>
+        </label>
+        <label class="field field-full">
+          Observacoes internas
+          <textarea name="internal_notes"></textarea>
+        </label>
+        <label class="field field-full">
+          Motivo da remarcacao
+          <textarea name="reason" required></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-reschedule-modal>Cancelar</button>
+          <button class="button" type="submit" data-submit-reschedule>Confirmar reagendamento</button>
+        </div>
       </form>
     </div>
   </div>

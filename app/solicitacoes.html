@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitacoes | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/journey.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Solicitacoes</h1>
+            <p>Pessoas que pediram atendimento e ainda nao sao pacientes.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div data-page-message aria-live="polite" hidden></div>
+          <div class="toolbar">
+            <input type="search" data-filter placeholder="Pesquisar por nome, email, telefone ou interesse">
+            <select data-status-filter>
+              <option value="">Todos os estados</option>
+              <option value="new">Novo</option>
+              <option value="contacted">Em conversa</option>
+              <option value="qualified">Atendimento confirmado</option>
+              <option value="converted">Paciente criado</option>
+              <option value="closed">Contato encerrado</option>
+            </select>
+          </div>
+
+          <div class="grid" data-requests-list></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" data-portal-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="portal-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="portal-modal-title">Portal do Paciente criado</h2>
+          <p class="muted">Envie estes dados somente pelo canal combinado com o paciente.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-portal-modal>Fechar</button>
+      </div>
+
+      <div class="access-box">
+        <p><strong>Nome:</strong> <span data-portal-name></span></p>
+        <p><strong>Email:</strong> <span data-portal-email></span></p>
+        <p><strong>Senha temporaria:</strong> <span data-portal-password></span></p>
+        <p><strong>Endereco do Portal:</strong> <span data-portal-url></span></p>
+      </div>
+
+      <label class="field">
+        Mensagem pronta
+        <textarea data-ready-message rows="12" readonly></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button class="button button-secondary" type="button" data-copy-ready-message>Copiar mensagem</button>
+        <a class="button" data-open-ready-whatsapp target="_blank" rel="noopener">Abrir WhatsApp</a>
+        <button class="button button-secondary" type="button" data-close-portal-modal>Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/solicitacoes.js"></script>
+</body>
+</html>

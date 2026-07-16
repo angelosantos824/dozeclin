@@ -1,6 +1,6 @@
 import { supabase } from '../config/supabase.js';
 
-const PROFILE_FIELDS = 'id, auth_user_id, clinic_id, full_name, email, phone, role, professional_registration, specialty, status, created_at, updated_at';
+const PROFILE_FIELDS = 'id, auth_user_id, clinic_id, full_name, email, phone, role, professional_registration, specialty, display_title, status, created_at, updated_at';
 const PROFESSIONAL_ROLES = ['professional', 'supervisor', 'clinic_admin'];
 
 export async function getProfileById(id) {
@@ -20,12 +20,14 @@ export async function listProfessionals(clinicId) {
     .select(PROFILE_FIELDS)
     .eq('clinic_id', clinicId)
     .in('role', PROFESSIONAL_ROLES)
+    .eq('status', 'active')
     .order('full_name', { ascending: true });
 
   if (error) throw error;
 
   return (data || []).filter((profile) => {
-    return profile.role !== 'clinic_admin' || Boolean(profile.specialty);
+    if (profile.role === 'professional') return true;
+    return Boolean(profile.specialty || profile.professional_registration || profile.display_title);
   });
 }
 

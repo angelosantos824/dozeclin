@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitar atendimento | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/journey.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body class="public-page">
+  <main class="public-panel">
+    <h1>Solicitar atendimento</h1>
+    <p>Conte brevemente como podemos ajudar. A equipa da clinica entrara em contacto para conversar com voce.</p>
+
+    <div data-message aria-live="polite" hidden></div>
+
+    <form data-request-form class="form-grid">
+      <label class="field">
+        Nome completo
+        <input name="full_name" autocomplete="name" maxlength="160" required>
+      </label>
+      <label class="field">
+        Email
+        <input type="email" name="email" autocomplete="email" maxlength="254" required>
+      </label>
+      <label class="field">
+        Telefone / WhatsApp
+        <input name="phone" autocomplete="tel" inputmode="tel" maxlength="32" required>
+      </label>
+      <label class="field">
+        Interesse
+        <select name="interest" required>
+          <option value="">Selecione</option>
+          <option value="Primeira consulta">Primeira consulta</option>
+          <option value="Acompanhamento">Acompanhamento</option>
+          <option value="Retorno">Retorno</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </label>
+      <label class="field field-full">
+        Mensagem opcional
+        <textarea name="message" rows="4" maxlength="1200"></textarea>
+      </label>
+      <label class="field field-full" hidden aria-hidden="true">
+        Nao preencher
+        <input name="website" tabindex="-1" autocomplete="off">
+      </label>
+      <label class="field field-full consent-line">
+        <input type="checkbox" name="consent" required>
+        <span>Autorizo o contacto sobre esta solicitacao e o tratamento dos dados informados conforme RGPD/LGPD.</span>
+      </label>
+      <button class="button field-full" type="submit">Solicitar atendimento</button>
+    </form>
+  </main>
+
+  <script type="module" src="../assets/js/pages/atendimento.js"></script>
+</body>
+</html>

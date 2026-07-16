@@ -6,3 +6,21 @@ verify_jwt = true
 
 [functions.complete-first-access-password]
 verify_jwt = true
+
+[functions.start-patient-journey]
+verify_jwt = true
+
+[functions.generate-financial-receipt-pdf]
+verify_jwt = true
+
+[functions.generate-document-qrcode]
+verify_jwt = true
+
+[functions.generate-document-share-link]
+verify_jwt = true
+
+[functions.generate-clinical-document-pdf]
+verify_jwt = true
+
+[functions.access-shared-document]
+verify_jwt = false

@@ -34,6 +34,11 @@ export async function requireAuth(requiredPermission = null) {
     return null;
   }
 
+  if (profile.role === 'patient' && !isCurrentPage('portal-paciente.html')) {
+    window.location.replace('portal-paciente.html');
+    return null;
+  }
+
   if (profile.role !== 'super_admin' && !profile.clinic_id) {
     redirectToLogin('Perfil sem clinica associada.');
     return null;

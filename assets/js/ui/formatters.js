@@ -49,6 +49,53 @@ export function formatDateTime(value) {
   }).format(new Date(value));
 }
 
+export function formatDateTimeInTimezone(value, timezone = DEFAULT_TIMEZONE) {
+  if (!value) return '-';
+  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: timezone || DEFAULT_TIMEZONE
+  }).format(new Date(value));
+}
+
+export function formatTimeInTimezone(value, timezone = DEFAULT_TIMEZONE) {
+  if (!value) return '-';
+  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: timezone || DEFAULT_TIMEZONE
+  }).format(new Date(value));
+}
+
+export function toLocalDateInput(value, timezone = DEFAULT_TIMEZONE) {
+  if (!value) return todayDateInput();
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: timezone || DEFAULT_TIMEZONE
+  }).formatToParts(new Date(value));
+  const get = (type) => parts.find((part) => part.type === type)?.value;
+  return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+export function toLocalTimeInput(value, timezone = DEFAULT_TIMEZONE) {
+  if (!value) return '';
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: timezone || DEFAULT_TIMEZONE
+  }).formatToParts(new Date(value));
+  const get = (type) => parts.find((part) => part.type === type)?.value;
+  return `${get('hour')}:${get('minute')}`;
+}
+
 export function formatCurrency(value, currency = 'EUR') {
   return new Intl.NumberFormat(DEFAULT_LOCALE, {
     style: 'currency',

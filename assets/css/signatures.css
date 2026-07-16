@@ -1,0 +1,57 @@
+.signature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.signature-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.signature-card h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.signature-card dl {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.signature-card dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.signature-card dd {
+  margin: 0;
+}
+
+.signature-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.signature-canvas-field canvas {
+  width: 100%;
+  aspect-ratio: 32 / 11;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(45deg, #ffffff 25%, #f5f8fa 25%, #f5f8fa 50%, #ffffff 50%, #ffffff 75%, #f5f8fa 75%);
+  background-size: 18px 18px;
+  touch-action: none;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

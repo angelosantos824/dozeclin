@@ -68,6 +68,28 @@ export const PATIENT_STATUS_LABELS = {
     archived: "Arquivado"
 };
 
+export const PATIENT_REQUEST_STATUS_LABELS = {
+    new: "Novo",
+    contacted: "Em conversa",
+    qualified: "Atendimento confirmado",
+    converted: "Paciente criado",
+    closed: "Contato encerrado"
+};
+
+export const PATIENT_ONBOARDING_STEP_LABELS = {
+    welcome: "Boas-vindas",
+    password: "Alterar senha",
+    profile: "Completar cadastro",
+    anamnesis: "Concluir anamnese",
+    completed: "Concluido"
+};
+
+export const PATIENT_ONBOARDING_STATUS_LABELS = {
+    not_started: "Nao iniciado",
+    in_progress: "Em andamento",
+    completed: "Concluido"
+};
+
 /* ==========================================================
    PERFIS
 ========================================================== */
@@ -93,10 +115,15 @@ export const USER_STATUS_LABELS = {
 export const APPOINTMENT_STATUS_LABELS = {
     scheduled: "Agendada",
     confirmed: "Confirmada",
+    checked_in: "Paciente chegou",
     in_progress: "Em atendimento",
     completed: "Concluida",
+    rescheduled: "Remarcada",
     cancelled: "Cancelada",
-    no_show: "Nao compareceu"
+    cancelled_by_patient: "Cancelada pelo paciente",
+    cancelled_by_clinic: "Cancelada pela clinica",
+    no_show: "Nao compareceu",
+    archived: "Arquivada"
 };
 
 export const APPOINTMENT_TYPE_LABELS = {
@@ -107,6 +134,26 @@ export const APPOINTMENT_TYPE_LABELS = {
     session: "Sessao",
     other: "Outro"
 };
+
+export const APPOINTMENT_MODALITY_LABELS = {
+    presential: "Presencial",
+    online: "Online",
+    home: "Domiciliar"
+};
+
+export const COMMON_TIMEZONES = [
+    "Europe/Lisbon",
+    "America/Manaus",
+    "America/Sao_Paulo",
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Los_Angeles",
+    "America/Phoenix",
+    "America/Toronto",
+    "Europe/Madrid",
+    "Europe/London"
+];
 
 export const MEDICAL_RECORD_TYPE_LABELS = {
     evolution: "Evolucao",
@@ -122,6 +169,91 @@ export const MEDICAL_RECORD_STATUS_LABELS = {
     signed: "Assinado",
     cancelled: "Cancelado"
 };
+
+export const DOCUMENT_STATUS_LABELS = {
+    draft: "Rascunho",
+    issued: "Emitido",
+    revoked: "Revogado",
+    cancelled: "Cancelado",
+    archived: "Arquivado"
+};
+
+export const DOCUMENT_SIGNATURE_STATUS_LABELS = {
+    unsigned: "Não assinado",
+    signed: "Assinado",
+    revoked: "Assinatura revogada"
+};
+
+export const DOCUMENT_TYPE_LABELS = {
+    attendance_certificate: "Declaração de comparecimento",
+    follow_up_certificate: "Declaração de acompanhamento",
+    service_certificate: "Declaração de atendimento",
+    clinical_report: "Relatório clínico",
+    clinical_progress: "Evolução clínica",
+    referral: "Encaminhamento",
+    treatment_plan: "Plano terapêutico",
+    consent: "Consentimento",
+    custom: "Documento personalizado"
+};
+
+export const DOCUMENT_VISIBILITY_LABELS = {
+    internal: "Interno",
+    patient: "Paciente",
+    public_validation_only: "Validação pública"
+};
+
+export const SIGNATURE_TYPE_LABELS = {
+    drawn: "Assinatura desenhada",
+    image: "Imagem da assinatura",
+    stamp: "Carimbo profissional",
+    seal: "Selo da clínica",
+    clinic_signature: "Assinatura institucional",
+    clinic_stamp: "Carimbo da clínica",
+    clinic_seal: "Selo da clínica",
+    clinic_logo: "Logotipo da clínica"
+};
+
+export const FINANCIAL_CHARGE_TYPE_LABELS = {
+    appointment: "Sessao",
+    package: "Pacote",
+    manual: "Manual",
+    subscription: "Assinatura",
+    adjustment: "Ajuste"
+};
+
+export const FINANCIAL_CHARGE_STATUS_LABELS = {
+    pending: "Pendente",
+    partially_paid: "Parcialmente paga",
+    paid: "Paga",
+    overdue: "Em atraso",
+    cancelled: "Cancelada",
+    refunded: "Reembolsada"
+};
+
+export const FINANCIAL_PAYMENT_METHOD_LABELS = {
+    cash: "Dinheiro",
+    bank_transfer: "Transferencia bancaria",
+    card: "Cartao",
+    pix: "PIX",
+    mb_way: "MB Way",
+    stripe: "Stripe",
+    paypal: "PayPal",
+    other: "Outro"
+};
+
+export const FINANCIAL_PAYMENT_STATUS_LABELS = {
+    confirmed: "Confirmado",
+    pending: "Pendente",
+    cancelled: "Cancelado",
+    refunded: "Reembolsado"
+};
+
+export const FINANCIAL_RECEIPT_STATUS_LABELS = {
+    issued: "Emitido",
+    cancelled: "Cancelado"
+};
+
+export const SUPPORTED_CURRENCIES = ["EUR", "BRL", "USD"];
 
 /* ==========================================================
    STATUS DA CLÍNICA

@@ -17,13 +17,21 @@ const CLINIC_BASIC_FIELDS = [
   'secondary_color'
 ];
 
+const BRANDING_BUCKET = 'document-assets';
+const LOGO_MAX_BYTES = 2 * 1024 * 1024;
+const LOGO_MIME_EXTENSIONS = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/webp': 'webp'
+};
+
 export async function getClinicSettingsConfiguration() {
   const profile = await requireOperationalClinicAdmin();
 
   const [clinicResult, settingsResult] = await Promise.all([
     supabase
       .from('clinics')
-      .select('id, name, legal_name, email, phone, whatsapp, country, city, address, postal_code, timezone, default_currency, primary_color, secondary_color')
+      .select('id, name, legal_name, email, phone, whatsapp, country, city, address, postal_code, timezone, default_currency, logo_url, primary_color, secondary_color')
       .eq('id', profile.clinic_id)
       .single(),
     supabase
@@ -41,6 +49,73 @@ export async function getClinicSettingsConfiguration() {
     settings: settingsResult.data,
     profile
   };
+}
+
+export async function getClinicLogoSignedUrl(path) {
+  if (!path) return null;
+  if (/^https?:\/\//i.test(path)) return path;
+
+  const { data, error } = await supabase.storage
+    .from(BRANDING_BUCKET)
+    .createSignedUrl(path, 60 * 60);
+
+  if (error) throw mapSettingsError(error);
+  return data?.signedUrl || null;
+}
+
+export async function uploadClinicLogo(file) {
+  const profile = await requireOperationalClinicAdmin();
+  validateLogoFile(file);
+  const preparedFile = await prepareLogoFile(file);
+
+  const current = await getClinicSettingsConfiguration();
+  const previousPath = current.clinic?.logo_url || null;
+  const extension = LOGO_MIME_EXTENSIONS[preparedFile.type];
+  const logoPath = `clinic-branding/${profile.clinic_id}/logo.${extension}`;
+
+  if (previousPath && !/^https?:\/\//i.test(previousPath)) {
+    await supabase.storage.from(BRANDING_BUCKET).remove([previousPath]);
+  }
+
+  const { error: uploadError } = await supabase.storage
+    .from(BRANDING_BUCKET)
+    .upload(logoPath, preparedFile, {
+      contentType: preparedFile.type,
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (uploadError) throw mapSettingsError(uploadError);
+
+  const { data, error } = await supabase
+    .from('clinics')
+    .update({ logo_url: logoPath })
+    .eq('id', profile.clinic_id)
+    .select('id, logo_url')
+    .single();
+
+  if (error) throw mapSettingsError(error);
+  return data;
+}
+
+export async function removeClinicLogo() {
+  const profile = await requireOperationalClinicAdmin();
+  const current = await getClinicSettingsConfiguration();
+  const previousPath = current.clinic?.logo_url || null;
+
+  if (previousPath && !/^https?:\/\//i.test(previousPath)) {
+    await supabase.storage.from(BRANDING_BUCKET).remove([previousPath]);
+  }
+
+  const { data, error } = await supabase
+    .from('clinics')
+    .update({ logo_url: null })
+    .eq('id', profile.clinic_id)
+    .select('id, logo_url')
+    .single();
+
+  if (error) throw mapSettingsError(error);
+  return data;
 }
 
 export async function updateClinicBasicData(data) {
@@ -108,6 +183,50 @@ function validateConfiguration(data) {
   if (!data.clinic.timezone) throw new Error('Revise os campos indicados.');
   if (data.clinic.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.clinic.email)) {
     throw new Error('Revise os campos indicados.');
+  }
+}
+
+function validateLogoFile(file) {
+  if (!file) throw new Error('Escolha uma imagem para carregar.');
+  if (!LOGO_MIME_EXTENSIONS[file.type]) {
+    throw new Error('Formato invalido. Utilize PNG, JPG, JPEG ou WEBP.');
+  }
+  if (file.size > LOGO_MAX_BYTES) {
+    throw new Error('O logotipo deve ter no maximo 2 MB.');
+  }
+}
+
+async function prepareLogoFile(file) {
+  if (file.type !== 'image/webp') return file;
+
+  const imageUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Nao foi possivel processar o logotipo.'));
+      img.src = imageUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth || image.width;
+    canvas.height = image.naturalHeight || image.height;
+    const context = canvas.getContext('2d');
+    if (!context || !canvas.width || !canvas.height) {
+      throw new Error('Nao foi possivel processar o logotipo.');
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((result) => {
+        if (result) resolve(result);
+        else reject(new Error('Nao foi possivel converter o logotipo.'));
+      }, 'image/png');
+    });
+
+    return new File([blob], file.name.replace(/\.[^.]+$/, '.png'), { type: 'image/png' });
+  } finally {
+    URL.revokeObjectURL(imageUrl);
   }
 }
 

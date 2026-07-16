@@ -1,6 +1,29 @@
 import { supabase } from '../config/supabase.js';
 
-const PATIENT_FIELDS = 'id, clinic_id, full_name, email, phone, birth_date, document, address, timezone, status, access_code, created_at, updated_at';
+const PATIENT_FIELDS = `
+  id,
+  clinic_id,
+  auth_user_id,
+  full_name,
+  email,
+  phone,
+  birth_date,
+  document,
+  sex,
+  marital_status,
+  profession,
+  address,
+  city,
+  postal_code,
+  emergency_contact_name,
+  emergency_contact_phone,
+  profile_completed_at,
+  timezone,
+  status,
+  access_code,
+  created_at,
+  updated_at
+`;
 
 export async function listPatients(clinicId) {
   const { data, error } = await supabase
@@ -10,7 +33,7 @@ export async function listPatients(clinicId) {
     .order('full_name', { ascending: true });
 
   if (error) throw error;
-  return data || [];
+  return (data || []).filter(isSchedulablePatient);
 }
 
 export async function getPatientById(clinicId, patientId) {
@@ -59,4 +82,9 @@ export async function countPatientsByStatus(clinicId) {
     summary[patient.status] = (summary[patient.status] || 0) + 1;
     return summary;
   }, { total: 0, active: 0, inactive: 0, discharged: 0, archived: 0 });
+}
+
+function isSchedulablePatient(patient) {
+  const status = String(patient?.status || '').toLowerCase();
+  return !['archived', 'arquivado', 'inactive', 'inativo'].includes(status);
 }

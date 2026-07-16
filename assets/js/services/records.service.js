@@ -62,6 +62,7 @@ export async function createMedicalRecord(data) {
     clinic_id: profile.clinic_id,
     patient_id: data.patient_id,
     professional_id: data.professional_id,
+    appointment_id: data.appointment_id,
     record_type: data.record_type || 'evolution',
     title: data.title || null,
     content: data.content,
@@ -91,6 +92,7 @@ export async function updateMedicalRecord(recordId, data) {
 
   const payload = {
     professional_id: data.professional_id,
+    appointment_id: data.appointment_id,
     record_type: data.record_type,
     title: data.title || null,
     content: data.content,
@@ -167,6 +169,10 @@ function toPortugueseError(error) {
 
   if (message.includes('Paciente invalido')) {
     return new Error('Paciente invalido para esta clinica.');
+  }
+
+  if (message.includes('medical_records_appointment_required') || message.includes('appointment_id')) {
+    return new Error('Selecione o Appointment que originou este prontuario.');
   }
 
   return new Error(message || 'Nao foi possivel processar o prontuario.');

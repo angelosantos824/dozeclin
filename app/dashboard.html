@@ -20,46 +20,73 @@
       </div>
       <header class="topbar" data-topbar></header>
       <section class="content">
-        <div class="page-header">
+        <div class="dashboard-header page-header">
           <div>
             <h1>Painel</h1>
             <p>Resumo operacional da clinica autenticada.</p>
           </div>
+          <div class="dashboard-header-side">
+            <span class="badge" data-clinic-status>Clinica</span>
+            <div class="dashboard-actions">
+              <a class="button button-secondary" href="agenda.html">Ver agenda</a>
+              <a class="button" href="agenda.html">Nova sessao</a>
+            </div>
+          </div>
         </div>
 
-        <p class="muted" data-dashboard-status role="status" aria-live="polite">A carregar...</p>
+        <div data-dashboard-status role="status" aria-live="polite" hidden></div>
 
-        <div class="grid grid-4" data-dashboard-cards hidden>
-          <article class="card metric">
-            <span>Pacientes</span>
-            <strong id="metric-patients">0</strong>
-          </article>
-          <article class="card metric">
-            <span>Ativos</span>
-            <strong id="metric-active">0</strong>
-          </article>
-          <article class="card metric">
-            <span>Consultas futuras</span>
-            <strong id="metric-appointments">0</strong>
-          </article>
-          <article class="card metric">
-            <span>Consultas hoje</span>
-            <strong id="metric-today">0</strong>
-          </article>
-          <article class="card metric">
-            <span>Confirmadas hoje</span>
-            <strong id="metric-confirmed-today">0</strong>
-          </article>
-          <article class="card metric">
-            <span>Estado da clinica</span>
-            <strong id="metric-clinic">-</strong>
-          </article>
+        <div class="dashboard-skeleton" data-dashboard-skeleton aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
 
-        <div class="panel dashboard-next">
-          <h2>Proximas consultas</h2>
-          <div data-next-appointments class="agenda-list"></div>
-        </div>
+        <section class="dashboard-primary-grid" aria-label="Resumo principal" data-primary-metrics hidden></section>
+        <section class="dashboard-metrics-grid" aria-label="Indicadores secundarios" data-secondary-metrics hidden></section>
+
+        <section class="dashboard-operational-grid" data-dashboard-operational hidden>
+          <article class="dashboard-card operational-panel">
+            <div class="dashboard-card-header">
+              <div>
+                <h2>Agenda de hoje</h2>
+                <p class="muted">Apenas sessoes operacionais.</p>
+              </div>
+              <a class="button button-secondary button-sm" href="agenda.html">Abrir agenda</a>
+            </div>
+            <div class="dashboard-today-list" data-today-appointments></div>
+          </article>
+
+          <div class="dashboard-side-stack">
+            <article class="dashboard-card operational-panel">
+              <div class="dashboard-card-header">
+                <div>
+                  <h2>Solicitacoes</h2>
+                  <p class="muted">Entrada de novos pacientes.</p>
+                </div>
+                <a class="button button-secondary button-sm" href="solicitacoes.html">Ver solicitacoes</a>
+              </div>
+              <div data-requests-summary></div>
+            </article>
+
+            <article class="dashboard-card operational-panel">
+              <div class="dashboard-card-header">
+                <div>
+                  <h2>Financeiro</h2>
+                  <p class="muted">A receber, recebido no mes e atraso.</p>
+                </div>
+                <a class="button button-secondary button-sm" href="financeiro.html">Ver financeiro</a>
+              </div>
+              <div class="dashboard-financial-list" data-dashboard-financial></div>
+            </article>
+
+            <article class="dashboard-card operational-panel" data-alerts-panel hidden>
+              <h2>Atencao</h2>
+              <div class="dashboard-alert-list" data-operational-alerts></div>
+            </article>
+          </div>
+        </section>
       </section>
     </main>
   </div>

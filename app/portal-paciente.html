@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal do Paciente | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/journey.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body class="public-page">
+  <main class="portal-panel">
+    <section class="portal-section" data-step="welcome">
+      <h1>Bem-vindo.</h1>
+      <p>Antes da primeira consulta, vamos concluir tres etapas simples.</p>
+      <div class="portal-steps">
+        <article class="portal-step"><strong>1</strong><span>Alterar senha</span></article>
+        <article class="portal-step"><strong>2</strong><span>Completar cadastro</span></article>
+        <article class="portal-step"><strong>3</strong><span>Responder anamnese</span></article>
+      </div>
+      <button class="button" type="button" data-start-portal>Comecar</button>
+    </section>
+
+    <section class="portal-section" data-step="profile" hidden>
+      <h1>Completar cadastro</h1>
+      <p>Alguns dados ja vieram da sua solicitacao. Complete apenas o que falta.</p>
+      <div data-profile-message aria-live="polite" hidden></div>
+      <form data-profile-form class="form-grid">
+        <label class="field">
+          Nome
+          <input name="full_name" readonly>
+        </label>
+        <label class="field">
+          Email
+          <input type="email" name="email" readonly>
+        </label>
+        <label class="field">
+          Telefone
+          <input name="phone" readonly>
+        </label>
+        <label class="field">
+          Documento
+          <input name="document">
+        </label>
+        <label class="field">
+          Nascimento
+          <input type="date" name="birth_date">
+        </label>
+        <label class="field">
+          Sexo
+          <input name="sex">
+        </label>
+        <label class="field">
+          Estado civil
+          <input name="marital_status">
+        </label>
+        <label class="field">
+          Profissao
+          <input name="profession">
+        </label>
+        <label class="field field-full">
+          Morada
+          <input name="address">
+        </label>
+        <label class="field">
+          Cidade
+          <input name="city">
+        </label>
+        <label class="field">
+          Codigo postal
+          <input name="postal_code">
+        </label>
+        <label class="field">
+          Contato de emergencia
+          <input name="emergency_contact_name">
+        </label>
+        <label class="field">
+          Telefone de emergencia
+          <input name="emergency_contact_phone">
+        </label>
+        <button class="button field-full" type="submit">Guardar e continuar</button>
+      </form>
+    </section>
+
+    <section class="portal-section" data-step="anamnesis" hidden>
+      <h1>Anamnese inicial</h1>
+      <p>Responda com calma. O rascunho e guardado a cada etapa.</p>
+      <div class="progress-track" aria-hidden="true"><div class="progress-bar" data-progress-bar></div></div>
+      <div data-anamnesis-message aria-live="polite" hidden></div>
+      <form data-anamnesis-form class="grid">
+        <h2 data-anamnesis-title>Dados gerais</h2>
+        <label class="field">
+          Conte um pouco sobre esta etapa
+          <textarea name="answer" rows="7"></textarea>
+        </label>
+        <div class="form-actions">
+          <button class="button button-secondary" type="button" data-prev-step>Voltar</button>
+          <button class="button" type="submit" data-next-step>Continuar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="portal-section" data-step="done" hidden>
+      <header class="portal-hero">
+        <div class="portal-logo" data-portal-logo>
+          <span data-portal-logo-monogram>D</span>
+          <img data-portal-logo-image alt="Logotipo da clinica" hidden>
+        </div>
+        <div>
+          <span class="portal-eyebrow" data-clinic-name>Portal do Paciente</span>
+          <h1 data-portal-patient-name>Ola.</h1>
+          <p data-portal-welcome-copy>Este e o seu espaco para acompanhar sessoes, documentos e pagamentos com tranquilidade.</p>
+          <span class="portal-contact-line" data-clinic-contact></span>
+        </div>
+        <div class="portal-hero-actions">
+          <span class="status-badge" data-registration-status>Cadastro</span>
+          <button class="button button-secondary" type="button" data-portal-signout>Sair do portal</button>
+        </div>
+      </header>
+
+      <div class="portal-home">
+        <article class="portal-card portal-next-card">
+          <div class="portal-card-header">
+            <div>
+              <span class="portal-card-kicker">Proxima sessao</span>
+              <h2>Sua proxima consulta</h2>
+              <p class="muted" data-next-session-helper>-</p>
+            </div>
+            <span class="status-badge" data-next-session-status>-</span>
+          </div>
+          <div class="portal-session-grid" data-next-session></div>
+          <div class="portal-card-actions">
+            <a class="button" data-join-session href="#" target="_blank" rel="noopener" aria-disabled="true">Entrar na sessao</a>
+            <button class="button button-secondary" type="button" disabled>Solicitar remarcacao</button>
+          </div>
+        </article>
+
+        <section class="portal-two-column">
+          <article class="portal-card">
+            <div class="portal-card-header">
+              <div>
+                <span class="portal-card-kicker">Atencao</span>
+                <h2>O que precisa da sua atencao</h2>
+              </div>
+            </div>
+            <div class="portal-attention-list" data-portal-attention></div>
+          </article>
+
+          <article class="portal-card">
+            <div class="portal-card-header">
+              <div>
+                <span class="portal-card-kicker">Acesso rapido</span>
+                <h2>O que voce pode consultar</h2>
+              </div>
+            </div>
+            <div class="portal-quick-actions" data-portal-quick-actions></div>
+          </article>
+        </section>
+
+        <article class="portal-card portal-soft-card">
+          <h2>Privacidade e cuidado</h2>
+          <p>As informacoes deste portal sao privadas e destinadas apenas ao seu acompanhamento. Em caso de duvida, fale diretamente com a clinica.</p>
+        </article>
+
+        <section class="portal-secondary-grid">
+          <article class="portal-card">
+            <div class="portal-card-header">
+              <div>
+                <h2>Meus documentos</h2>
+                <p class="muted">Documentos liberados pela clinica.</p>
+              </div>
+            </div>
+            <div class="portal-financial-grid" data-portal-documents></div>
+          </article>
+
+          <article class="portal-card">
+            <div class="portal-card-header">
+              <div>
+                <h2>Financeiro</h2>
+                <p class="muted">Pagamentos, recibos e valores em aberto.</p>
+              </div>
+              <button class="button button-secondary button-sm" type="button" disabled>Pagar</button>
+            </div>
+            <div class="portal-financial-grid" data-portal-financial></div>
+          </article>
+
+          <article class="portal-card portal-quiet-card">
+            <div class="portal-card-header">
+              <div>
+                <h2>Historico de sessoes</h2>
+                <p class="muted">Registros recentes.</p>
+              </div>
+            </div>
+            <div class="portal-history-list" data-session-history></div>
+          </article>
+
+          <article class="portal-card portal-quiet-card">
+            <h2>Preferencias</h2>
+            <p class="muted">Fuso horario atual: <strong data-current-timezone>-</strong></p>
+            <button class="button button-secondary button-sm" type="button" data-open-timezone-modal>Alterar fuso horario</button>
+            <div class="portal-hidden-status">
+              <span data-profile-status>Concluido</span>
+              <span data-anamnesis-status>-</span>
+              <span data-portal-documents-count>0 disponiveis</span>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" data-timezone-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="timezone-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="timezone-modal-title">Alterar fuso horario</h2>
+          <p class="muted">A consulta permanece no mesmo horario. Isto altera apenas a apresentacao.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-timezone-modal>Fechar</button>
+      </div>
+      <form class="form-grid" data-timezone-form>
+        <label class="field field-full">
+          Meu timezone
+          <input name="timezone" list="portal-timezones" required>
+        </label>
+        <datalist id="portal-timezones" data-portal-timezone-options></datalist>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-close-timezone-modal>Cancelar</button>
+          <button class="button" type="submit">Atualizar timezone</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/portal-paciente.js"></script>
+</body>
+</html>

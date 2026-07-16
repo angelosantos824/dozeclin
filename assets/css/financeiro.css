@@ -1,1 +1,179 @@
-/* Reserved for Sprint 2. */
+.financial-header,
+.financial-actions,
+.financial-tabs,
+.financial-panel-header {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.financial-header,
+.financial-panel-header {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.financial-actions {
+  justify-content: flex-end;
+}
+
+.financial-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.financial-summary-card,
+.financial-panel,
+.financial-cashflow-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.financial-summary-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.financial-summary-card h2 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.financial-summary-values {
+  display: grid;
+  gap: 7px;
+}
+
+.financial-summary-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.financial-summary-line strong {
+  color: var(--text);
+}
+
+.financial-tabs {
+  margin-bottom: 12px;
+}
+
+.financial-tab {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.financial-tab.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.financial-panel {
+  padding: 18px;
+}
+
+.financial-panel h2 {
+  margin-top: 0;
+}
+
+.financial-cashflow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.financial-cashflow-card {
+  padding: 14px;
+}
+
+.financial-cashflow-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.financial-status-pending,
+.financial-status-partially_paid,
+.financial-status-overdue,
+.financial-status-paid,
+.financial-status-cancelled,
+.financial-status-refunded {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 26px;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.financial-status-pending {
+  color: var(--warning);
+  background: #fffaeb;
+}
+
+.financial-status-partially_paid {
+  color: var(--primary);
+  background: #eef7fb;
+}
+
+.financial-status-overdue,
+.financial-status-cancelled {
+  color: var(--danger);
+  background: #fef3f2;
+}
+
+.financial-status-paid {
+  color: var(--success);
+  background: #ecfdf3;
+}
+
+.financial-status-refunded {
+  color: var(--muted);
+  background: #f2f4f7;
+}
+
+.financial-table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .financial-summary-grid,
+  .financial-cashflow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .financial-header,
+  .financial-panel-header {
+    display: grid;
+  }
+
+  .financial-actions .button {
+    width: 100%;
+  }
+
+  .financial-summary-grid,
+  .financial-cashflow-grid {
+    grid-template-columns: 1fr;
+  }
+}

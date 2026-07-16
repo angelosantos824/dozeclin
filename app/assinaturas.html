@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assinaturas | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/signatures.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Assinaturas</h1>
+            <p>Assinaturas visuais, carimbos e selos usados em documentos.</p>
+          </div>
+          <button class="button" type="button" data-open-signature-form>Nova assinatura</button>
+        </div>
+        <div data-page-message aria-live="polite" hidden></div>
+        <div class="signature-grid" data-signature-list></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" data-signature-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="signature-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="signature-modal-title">Nova assinatura</h2>
+          <p class="muted">Assinatura visual para identificacao documental. Nao corresponde a assinatura eletronica qualificada.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-signature-modal>Fechar</button>
+      </div>
+      <div data-form-message aria-live="polite" hidden></div>
+      <form class="form-grid" data-signature-form>
+        <label class="field">
+          Tipo
+          <select name="signature_type" required>
+            <option value="drawn">Assinatura desenhada</option>
+            <option value="image">Imagem da assinatura</option>
+            <option value="stamp">Carimbo profissional</option>
+            <option value="seal">Selo da clinica</option>
+            <option value="clinic_signature">Assinatura institucional</option>
+            <option value="clinic_stamp">Carimbo da clinica</option>
+            <option value="clinic_seal">Selo institucional</option>
+            <option value="clinic_logo">Logotipo da clinica</option>
+          </select>
+        </label>
+        <label class="field">
+          Nome de exibicao
+          <input name="display_name" maxlength="80">
+        </label>
+        <label class="field field-full" data-file-field>
+          Arquivo
+          <input type="file" name="signature_file" accept="image/png,image/webp,image/jpeg">
+        </label>
+        <div class="field field-full signature-canvas-field" data-canvas-field>
+          <span>Desenhar assinatura</span>
+          <canvas width="640" height="220" data-signature-canvas></canvas>
+          <div class="form-actions">
+            <button class="button button-secondary" type="button" data-clear-canvas>Limpar</button>
+          </div>
+        </div>
+        <label class="field field-full checkbox-field">
+          <input type="checkbox" name="is_default">
+          Definir como padrao para este tipo
+        </label>
+        <button class="button field-full" type="submit" data-save-signature>Guardar assinatura</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../assets/js/pages/assinaturas.js"></script>
+</body>
+</html>

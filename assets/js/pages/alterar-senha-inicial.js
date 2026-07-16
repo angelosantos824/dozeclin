@@ -9,7 +9,7 @@ const message = document.querySelector('[data-message]');
 if (!profile) {
   window.location.replace('login.html');
 } else if (profile.is_platform_user || !profile.must_change_password) {
-  window.location.replace('dashboard.html');
+  window.location.replace(profile.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
 }
 
 form?.addEventListener('submit', changePassword);
@@ -46,7 +46,7 @@ async function changePassword(event) {
     form.password.value = '';
     form.confirm_password.value = '';
     showMessage(message, 'Senha alterada com sucesso.', 'success');
-    window.location.replace('dashboard.html');
+    window.location.replace(profile.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
   } catch (error) {
     console.error('Falha ao alterar senha inicial.', { message: error.message });
     showMessage(message, error.message || 'Nao foi possivel alterar a senha. Tente novamente.', 'error');

@@ -1,3 +1,438 @@
-.dashboard-next {
-  margin-top: 18px;
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.dashboard-header-side,
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.dashboard-skeleton {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-skeleton[hidden],
+.dashboard-primary-grid[hidden],
+.dashboard-metrics-grid[hidden],
+.dashboard-operational-grid[hidden] {
+  display: none;
+}
+
+.dashboard-skeleton span {
+  min-height: 118px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, #eef5f6, #ffffff, #eef5f6);
+  background-size: 220% 100%;
+  animation: dashboard-loading 1.2s ease-in-out infinite;
+}
+
+.dashboard-primary-grid,
+.dashboard-metrics-grid,
+.dashboard-operational-grid,
+.dashboard-side-stack,
+.dashboard-today-list,
+.dashboard-alert-list,
+.dashboard-request-grid {
+  display: grid;
+}
+
+.dashboard-primary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard-metrics-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.dashboard-operational-grid {
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.7fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.dashboard-side-stack {
+  gap: 14px;
+}
+
+.dashboard-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  min-width: 0;
+}
+
+.dashboard-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dashboard-card h2,
+.dashboard-card p {
+  margin-top: 0;
+}
+
+.dashboard-card h2 {
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.primary-metric {
+  --metric-accent: var(--primary);
+  min-height: 196px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 16px;
+  padding: 20px 20px 18px;
+  border: 1px solid #e6eaf0;
+  border-top: 6px solid var(--metric-accent);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.primary-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+  border-color: rgba(11, 92, 117, 0.18);
+  border-top-color: var(--metric-accent);
+}
+
+.primary-metric.today {
+  --metric-accent: #0b5c75;
+}
+
+.primary-metric.confirmed {
+  --metric-accent: var(--success);
+}
+
+.primary-metric.waiting {
+  --metric-accent: var(--warning);
+}
+
+.primary-metric.in-progress {
+  --metric-accent: #7c3aed;
+}
+
+.dashboard-card-kpi-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dashboard-card-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--metric-accent) 12%, #ffffff);
+  color: var(--metric-accent);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.dashboard-card-kpi-body {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+}
+
+.dashboard-card-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.primary-metric .dashboard-card-label {
+  color: #182230;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.primary-metric .dashboard-card-value {
+  color: var(--metric-accent);
+  font-size: clamp(2.625rem, 5vw, 3rem);
+  font-weight: 850;
+  letter-spacing: 0;
+}
+
+.dashboard-card-unit {
+  color: var(--metric-accent);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.primary-metric .dashboard-card-detail {
+  color: #667085;
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+
+.primary-metric .dashboard-card-action {
+  align-self: end;
+  color: var(--metric-accent);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.secondary-metric {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+}
+
+.secondary-metric.cancelled .dashboard-card-value {
+  color: var(--danger);
+}
+
+.secondary-metric.no-show .dashboard-card-value {
+  color: #344054;
+}
+
+.dashboard-card-label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.dashboard-card-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.dashboard-card-detail {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.dashboard-card-action {
+  color: var(--primary);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.dashboard-card-action:hover {
+  text-decoration: underline;
+}
+
+.dashboard-today-list {
+  gap: 10px;
+}
+
+.dashboard-today-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dashboard-today-row:last-child {
+  border-bottom: 0;
+}
+
+.dashboard-today-time {
+  color: var(--primary);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.dashboard-today-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dashboard-today-main strong,
+.dashboard-today-main span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-today-main span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.dashboard-request-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-request-item {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.dashboard-request-item strong {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.dashboard-request-item span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.dashboard-alert-list {
+  gap: 8px;
+}
+
+.dashboard-financial-list {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-financial-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.dashboard-financial-row strong {
+  color: var(--text);
+}
+
+.dashboard-alert {
+  padding: 10px 12px;
+  border: 1px solid #fedf89;
+  border-radius: var(--radius-md);
+  background: #fffaeb;
+  color: var(--warning);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.dashboard-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.dashboard-error {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid #fecdca;
+  border-radius: var(--radius-md);
+  background: #fef3f2;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.appointment-badge.appointment-checked_in {
+  background: #fffaeb;
+  color: var(--warning);
+}
+
+.appointment-badge.appointment-in_progress {
+  background: #f4f0ff;
+  color: #6d28d9;
+}
+
+.appointment-badge.appointment-cancelled_by_patient,
+.appointment-badge.appointment-cancelled_by_clinic {
+  background: #fef3f2;
+  color: var(--danger);
+}
+
+@keyframes dashboard-loading {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-primary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header,
+  .dashboard-card-header {
+    display: grid;
+  }
+
+  .dashboard-header-side,
+  .dashboard-actions {
+    justify-content: stretch;
+  }
+
+  .dashboard-actions .button {
+    flex: 1;
+  }
+
+  .dashboard-primary-grid,
+  .dashboard-operational-grid,
+  .dashboard-skeleton {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-today-row {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .dashboard-today-row .appointment-badge,
+  .dashboard-today-row .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-metrics-grid,
+  .dashboard-request-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-actions .button,
+  .dashboard-card-header .button {
+    width: 100%;
+  }
 }

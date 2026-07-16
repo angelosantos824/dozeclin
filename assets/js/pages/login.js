@@ -35,7 +35,11 @@ form?.addEventListener('submit', async (event) => {
       window.location.replace('plataforma.html');
       return;
     }
-    window.location.replace(profile?.must_change_password ? 'alterar-senha-inicial.html' : 'dashboard.html');
+    if (profile?.must_change_password) {
+      window.location.replace('alterar-senha-inicial.html');
+      return;
+    }
+    window.location.replace(profile?.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
   } catch (error) {
     showMessage(message, 'Acesso negado. Verifique os dados informados.', 'error');
   } finally {

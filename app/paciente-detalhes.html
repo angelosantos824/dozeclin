@@ -29,9 +29,59 @@
         </div>
 
         <div class="panel patient-summary">
-          <strong>Dados do paciente</strong>
+          <strong>Resumo clinico</strong>
           <span data-patient-contact class="muted">-</span>
           <span data-patient-status class="muted">-</span>
+          <span data-patient-next class="muted">Proxima sessao: -</span>
+          <span data-patient-last class="muted">Ultimo atendimento: -</span>
+          <span data-patient-sessions class="muted">Sessoes realizadas: 0</span>
+          <span data-patient-finance class="muted">Status financeiro: pendente de integracao</span>
+          <span data-patient-anamnesis class="muted">Anamnese: -</span>
+          <span data-patient-specialty class="muted">Especialidade: -</span>
+        </div>
+
+        <div class="panel">
+          <div class="page-header">
+            <div>
+              <h2>Proxima Sessao</h2>
+              <p class="muted">Appointment central do acompanhamento.</p>
+            </div>
+            <a class="button button-secondary" href="agenda.html">Agendar Sessao</a>
+          </div>
+          <div data-appointment-card class="record-detail-grid"></div>
+        </div>
+
+        <div class="panel patient-journey">
+          <div class="page-header">
+            <div>
+              <h2>Jornada do paciente</h2>
+              <p class="muted">Organizacao completa do acompanhamento.</p>
+            </div>
+          </div>
+          <div class="journey-steps">
+            <span class="badge badge-info">Cadastro</span>
+            <span class="badge badge-info">Anamnese</span>
+            <span class="badge badge-info">Prontuario</span>
+            <span class="badge badge-neutral">Agenda</span>
+            <span class="badge badge-neutral">Documentos</span>
+            <span class="badge badge-neutral">Financeiro</span>
+            <span class="badge badge-neutral">Historico</span>
+          </div>
+          <div class="form-actions">
+            <button class="button button-secondary" type="button" data-generate-document>Gerar documento</button>
+          </div>
+        </div>
+
+        <div class="panel" data-patient-financial-panel hidden>
+          <div class="page-header">
+            <div>
+              <h2>Financeiro</h2>
+              <p class="muted">Cobrancas, pagamentos e recibos do paciente.</p>
+            </div>
+            <a class="button button-secondary" href="financeiro.html">Abrir financeiro</a>
+          </div>
+          <div class="record-detail-grid" data-patient-financial-summary></div>
+          <div class="record-list" data-patient-financial-history></div>
         </div>
 
         <div class="panel">
@@ -61,6 +111,10 @@
       <div data-form-message aria-live="polite" hidden></div>
 
       <form data-record-form class="form-grid">
+        <label class="field">
+          Appointment
+          <select name="appointment_id" required></select>
+        </label>
         <label class="field">
           Tipo do registro
           <select name="record_type" required>
@@ -115,6 +169,65 @@
         <button class="icon-button" type="button" data-close-view-modal>Fechar</button>
       </div>
       <div class="record-detail-grid" data-record-detail></div>
+    </div>
+  </div>
+
+  <div class="modal" data-document-modal hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="document-modal-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="document-modal-title">Gerar documento</h2>
+          <p class="muted">Cria um rascunho documental para revisao profissional.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-document-modal>Fechar</button>
+      </div>
+      <div data-document-message aria-live="polite" hidden></div>
+      <form class="form-grid" data-document-form>
+        <label class="field">
+          Paciente
+          <input name="patient_name" readonly>
+        </label>
+        <label class="field">
+          Appointment
+          <select name="appointment_id" required></select>
+        </label>
+        <label class="field">
+          Profissional
+          <input name="professional_name" readonly>
+        </label>
+        <label class="field">
+          Tipo de documento
+          <select name="document_type" required>
+            <option value="attendance_certificate">Declaracao de comparecimento</option>
+            <option value="follow_up_certificate">Declaracao de acompanhamento</option>
+            <option value="service_certificate">Declaracao de atendimento</option>
+            <option value="clinical_report">Relatorio clinico</option>
+            <option value="referral">Encaminhamento</option>
+            <option value="clinical_progress">Evolucao clinica</option>
+            <option value="treatment_plan">Plano terapeutico</option>
+            <option value="consent">Consentimento</option>
+            <option value="custom">Documento personalizado</option>
+          </select>
+        </label>
+        <label class="field">
+          Template
+          <input name="template_name" value="Declaracao de comparecimento" readonly>
+          <input type="hidden" name="template_code" value="ATTENDANCE_CERTIFICATE">
+        </label>
+        <label class="field">
+          Visibilidade
+          <select name="visibility" required>
+            <option value="patient">Paciente</option>
+            <option value="internal">Interno</option>
+            <option value="public_validation_only">Apenas validacao publica</option>
+          </select>
+        </label>
+        <label class="field checkbox-field">
+          <input type="checkbox" name="release_to_patient">
+          Liberar ao paciente apos emissao
+        </label>
+        <button class="button field-full" type="submit" data-save-document-draft>Criar rascunho</button>
+      </form>
     </div>
   </div>
 

@@ -4,12 +4,21 @@ import { mountLayout } from '../ui/layout.js';
 import { showMessage, clearMessage } from '../ui/messages.js';
 import {
   getClinicSettingsConfiguration,
-  saveClinicConfiguration
+  getClinicLogoSignedUrl,
+  removeClinicLogo,
+  saveClinicConfiguration,
+  uploadClinicLogo
 } from '../services/clinic-settings.service.js';
 
 const profile = await protectPage(PERMISSIONS.SETTINGS_MANAGE);
 const form = document.querySelector('[data-settings-form]');
 const message = document.querySelector('[data-message]');
+const logoFile = document.querySelector('[data-logo-file]');
+const logoImage = document.querySelector('[data-logo-image]');
+const logoMonogram = document.querySelector('[data-logo-monogram]');
+const saveLogoButton = document.querySelector('[data-save-logo]');
+const removeLogoButton = document.querySelector('[data-remove-logo]');
+let currentClinic = null;
 
 if (profile) {
   mountLayout(profile);
@@ -19,11 +28,15 @@ if (profile) {
 
 function bindEvents() {
   form?.addEventListener('submit', saveSettings);
+  logoFile?.addEventListener('change', previewSelectedLogo);
+  saveLogoButton?.addEventListener('click', saveLogo);
+  removeLogoButton?.addEventListener('click', removeLogo);
 }
 
 async function loadSettings() {
   try {
     const { clinic, settings } = await getClinicSettingsConfiguration();
+    currentClinic = clinic;
 
     form.name.value = clinic.name || '';
     form.legal_name.value = clinic.legal_name || '';
@@ -45,9 +58,109 @@ async function loadSettings() {
     form.cancellation_policy.value = settings?.cancellation_policy || '';
     form.footer_text.value = settings?.footer_text || '';
     form.email_signature.value = settings?.email_signature || '';
+    await renderLogo(clinic.logo_url);
   } catch (error) {
     console.error('Falha ao carregar configuracoes da clinica.', error);
     showMessage(message, 'Nao foi possivel carregar as configuracoes. Tente novamente.', 'error');
+  }
+}
+
+function previewSelectedLogo() {
+  const file = logoFile.files?.[0];
+  if (!file) {
+    renderLogo(currentClinic?.logo_url || null);
+    return;
+  }
+
+  const objectUrl = URL.createObjectURL(file);
+  showLogoImage(objectUrl);
+  logoImage.addEventListener('load', () => URL.revokeObjectURL(objectUrl), { once: true });
+}
+
+async function renderLogo(path) {
+  if (!logoMonogram || !logoImage) return;
+  const fallback = (currentClinic?.name || profile?.clinics?.name || 'D').trim().charAt(0).toUpperCase() || 'D';
+  logoMonogram.textContent = fallback;
+
+  if (!path) {
+    showLogoFallback();
+    return;
+  }
+
+  try {
+    const signedUrl = await getClinicLogoSignedUrl(path);
+    if (signedUrl) showLogoImage(signedUrl);
+    else showLogoFallback();
+  } catch (error) {
+    console.warn('Nao foi possivel carregar o logotipo da clinica.', error);
+    showLogoFallback();
+  }
+}
+
+function showLogoImage(src) {
+  logoImage.src = src;
+  logoImage.hidden = false;
+  logoMonogram.hidden = true;
+}
+
+function showLogoFallback() {
+  logoImage.removeAttribute('src');
+  logoImage.hidden = true;
+  logoMonogram.hidden = false;
+}
+
+async function saveLogo() {
+  clearMessage(message);
+  const file = logoFile?.files?.[0];
+  if (!file) {
+    showMessage(message, 'Escolha uma imagem para guardar.', 'error');
+    return;
+  }
+
+  const previousText = saveLogoButton.textContent;
+  try {
+    saveLogoButton.disabled = true;
+    removeLogoButton.disabled = true;
+    saveLogoButton.textContent = 'A carregar...';
+    showMessage(message, 'A carregar logotipo...', 'info');
+
+    const saved = await uploadClinicLogo(file);
+    currentClinic = { ...currentClinic, logo_url: saved.logo_url };
+    logoFile.value = '';
+    await renderLogo(saved.logo_url);
+    showMessage(message, 'Logotipo guardado com sucesso.', 'success');
+  } catch (error) {
+    console.error('Falha ao guardar logotipo da clinica.', error);
+    showMessage(message, error.message || 'Nao foi possivel guardar o logotipo.', 'error');
+  } finally {
+    saveLogoButton.disabled = false;
+    removeLogoButton.disabled = false;
+    saveLogoButton.textContent = previousText;
+  }
+}
+
+async function removeLogo() {
+  clearMessage(message);
+  const previousText = removeLogoButton.textContent;
+
+  try {
+    saveLogoButton.disabled = true;
+    removeLogoButton.disabled = true;
+    removeLogoButton.textContent = 'A remover...';
+    showMessage(message, 'A remover logotipo...', 'info');
+
+    const saved = await removeClinicLogo();
+    currentClinic = { ...currentClinic, logo_url: saved.logo_url };
+    logoFile.value = '';
+    await renderLogo(null);
+    showMessage(message, 'Logotipo removido com sucesso.', 'success');
+  } catch (error) {
+    console.error('Falha ao remover logotipo da clinica.', error);
+    showMessage(message, error.message || 'Nao foi possivel remover o logotipo.', 'error');
+  } finally {
+    saveLogoButton.disabled = false;
+    removeLogoButton.disabled = false;
+    removeLogoButton.textContent = previousText;
   }
 }
 

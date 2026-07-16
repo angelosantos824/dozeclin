@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentos | DOZECLIN</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/records.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-shell" data-app-shell>
+    <aside class="sidebar" data-sidebar></aside>
+    <main class="main">
+      <div class="mobile-bar">
+        <strong>DOZECLIN</strong>
+        <button class="button button-secondary" type="button" data-menu-toggle>Menu</button>
+      </div>
+      <header class="topbar" data-topbar></header>
+      <section class="content">
+        <div class="page-header">
+          <div>
+            <h1>Documentos</h1>
+            <p>Central de documentos emitidos, assinaturas, validacao e compartilhamento.</p>
+          </div>
+        </div>
+        <div data-page-message aria-live="polite" hidden></div>
+        <div class="toolbar">
+          <label class="field">
+            Estado
+            <select data-status-filter>
+              <option value="">Todos</option>
+              <option value="draft">Rascunho</option>
+              <option value="issued">Emitido</option>
+              <option value="revoked">Revogado</option>
+              <option value="cancelled">Cancelado</option>
+              <option value="archived">Arquivado</option>
+            </select>
+          </label>
+        </div>
+        <div class="record-list" data-documents-list></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="../assets/js/pages/documentos.js"></script>
+</body>
+</html>
