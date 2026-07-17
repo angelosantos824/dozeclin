@@ -17,10 +17,33 @@ Deno.serve(async (req) => {
     if (parsed.response) return parsed.response;
 
     const { userClient, serviceClient, authHeader } = getClients(req);
-    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-    if (!token) throw new HttpError('Sessao ausente.', 401);
-    const { data: authData, error: authError } = await userClient.auth.getUser(token);
-    if (authError || !authData.user) throw new HttpError('Sessao invalida.', 401);
+
+const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+if (!token) {
+  throw new HttpError('Sessao ausente.', 401);
+}
+
+const { data: authData, error: authError } =
+  await userClient.auth.getUser(token);
+
+if (authError) {
+  console.error('AUTH_GET_USER_ERROR', {
+    message: authError.message,
+    status: authError.status,
+    name: authError.name,
+    tokenPrefix: token.substring(0, 20)
+  });
+
+  throw new HttpError(
+    `Sessao invalida: ${authError.message}`,
+    authError.status || 401
+  );
+}
+
+if (!authData.user) {
+  throw new HttpError('Utilizador nao encontrado.', 401);
+}
 
     const { document_id: documentId } = parsed.body as { document_id?: string };
     if (!documentId) throw new HttpError('Informe o documento.', 400);
