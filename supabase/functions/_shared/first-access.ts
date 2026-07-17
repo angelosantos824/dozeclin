@@ -92,7 +92,7 @@ if (!data.user) {
   throw new HttpError('Utilizador não encontrado.', 401);
 }
 
-  return { user: data.user, serviceClient };
+  return { user: data.user, userClient, serviceClient };
 }
 
 export async function requireDozeclinSuperAdmin(req: Request) {
