@@ -62,6 +62,34 @@
   font-size: 0.84rem;
 }
 
+.validation-card-modal-panel {
+  width: min(760px, 100%);
+}
+
+.validation-card-preview {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  margin-bottom: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+}
+
+.validation-card-preview img {
+  width: min(100%, 520px);
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.validation-card-note {
+  margin: 0 0 16px;
+}
+
 .record-detail-grid {
   display: grid;
   gap: 14px;

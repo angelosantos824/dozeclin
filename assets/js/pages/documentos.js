@@ -1,6 +1,7 @@
 import { PERMISSIONS, hasPermission } from '../auth/permissions.js';
 import { protectPage } from '../auth/guards.js';
 import { mountLayout } from '../ui/layout.js';
+import { closeModal, openModal } from '../ui/modal.js';
 import { showMessage } from '../ui/messages.js';
 import { DOCUMENT_SIGNATURE_STATUS_LABELS, DOCUMENT_STATUS_LABELS, DOCUMENT_TYPE_LABELS, DOCUMENT_VISIBILITY_LABELS } from '../config/constants.js';
 import {
@@ -19,6 +20,7 @@ import { listProfessionalSignatures } from '../services/signatures.service.js';
 let profile = await protectPage(PERMISSIONS.DOCUMENTS_READ);
 let documents = [];
 let signatures = [];
+const VALIDATION_CARD_SIZE = 1200;
 
 if (profile) {
   mountLayout(profile);
@@ -120,7 +122,7 @@ function actionMenu(documentRow) {
     }
   }
   if (isSignedIssued && hasPermission(profile, PERMISSIONS.DOCUMENTS_PUBLIC_VALIDATION)) {
-    distributionActions.append(button('Gerar QR', () => handleQr(documentRow)));
+    distributionActions.append(button('Gerar cartão de validação', () => handleValidationCard(documentRow)));
   }
   if (isSignedIssued && documentRow.current_pdf_path && hasPermission(profile, PERMISSIONS.DOCUMENTS_SHARE)) {
     distributionActions.append(button('Criar link', () => handleShare(documentRow)));
@@ -177,9 +179,9 @@ async function handlePatientAccess(documentRow) {
   await loadDocuments();
 }
 
-async function handleQr(documentRow) {
+async function handleValidationCard(documentRow) {
   const result = await generateDocumentQrCode(documentRow.id);
-  if (result?.qr_signed_url) window.open(result.qr_signed_url, '_blank', 'noopener');
+  showValidationCardModal(result);
 }
 
 async function handlePdf(documentRow, mode) {
@@ -232,4 +234,137 @@ function button(label, handler, variant = 'button-secondary') {
     }
   });
   return element;
+}
+
+function showValidationCardModal(result) {
+  const modal = getValidationCardModal();
+  const preview = modal.querySelector('[data-validation-card-preview]');
+  const code = modal.querySelector('[data-validation-card-code]');
+  const svgButton = modal.querySelector('[data-download-svg]');
+  const pngButton = modal.querySelector('[data-download-png]');
+  const copyButton = modal.querySelector('[data-copy-validation-link]');
+  const linkNote = modal.querySelector('[data-validation-link-note]');
+
+  preview.replaceChildren();
+  code.textContent = result?.validation_code
+    ? `Codigo ${result.validation_code}`
+    : 'Codigo indisponivel';
+  linkNote.textContent = result?.validation_url
+    ? 'Link publico pronto para copia.'
+    : 'Validacao ja existente: link publico nao foi reexposto por seguranca.';
+
+  if (result?.card_svg_signed_url) {
+    const image = document.createElement('img');
+    image.src = result.card_svg_signed_url;
+    image.alt = 'Cartao oficial de validacao do documento';
+    image.loading = 'lazy';
+    preview.appendChild(image);
+  } else {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'Cartao indisponivel.';
+    preview.appendChild(empty);
+  }
+
+  svgButton.disabled = !result?.card_svg_signed_url;
+  svgButton.onclick = () => downloadUrl(result.card_svg_signed_url, 'dozeclin-cartao-validacao.svg');
+
+  pngButton.disabled = !result?.card_svg_signed_url;
+  pngButton.onclick = () => downloadValidationCardPng(result);
+
+  copyButton.disabled = !result?.validation_url;
+  copyButton.onclick = async () => {
+    if (!result?.validation_url) return;
+    await navigator.clipboard.writeText(result.validation_url);
+    showMessage(document.querySelector('[data-page-message]'), 'Link de validacao copiado.', 'success');
+  };
+
+  openModal(modal);
+}
+
+function getValidationCardModal() {
+  let modal = document.querySelector('[data-validation-card-modal]');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.className = 'modal validation-card-modal';
+  modal.hidden = true;
+  modal.dataset.validationCardModal = '';
+  modal.innerHTML = `
+    <div class="modal-panel validation-card-modal-panel" role="dialog" aria-modal="true" aria-labelledby="validation-card-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="validation-card-title">Cartao de validacao</h2>
+          <p class="muted" data-validation-card-code></p>
+        </div>
+        <button class="icon-button" type="button" data-close-validation-card>Fechar</button>
+      </div>
+      <div class="validation-card-preview" data-validation-card-preview></div>
+      <p class="muted validation-card-note" data-validation-link-note></p>
+      <div class="form-actions">
+        <button class="button button-secondary" type="button" data-download-png>Baixar PNG</button>
+        <button class="button button-secondary" type="button" data-download-svg>Baixar SVG</button>
+        <button class="button" type="button" data-copy-validation-link>Copiar link de validacao</button>
+        <button class="button button-secondary" type="button" data-close-validation-card>Fechar</button>
+      </div>
+    </div>
+  `;
+
+  modal.querySelectorAll('[data-close-validation-card]').forEach((element) => {
+    element.addEventListener('click', () => closeModal(modal));
+  });
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function downloadUrl(url, filename) {
+  if (!url) return;
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+async function downloadValidationCardPng(result) {
+  if (!result?.card_svg_signed_url) return;
+
+  try {
+    const response = await fetch(result.card_svg_signed_url);
+    if (!response.ok) throw new Error('Falha ao carregar cartao SVG.');
+    const svg = await response.text();
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const imageUrl = URL.createObjectURL(blob);
+    const image = new Image();
+
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = reject;
+      image.src = imageUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = VALIDATION_CARD_SIZE;
+    canvas.height = VALIDATION_CARD_SIZE;
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(imageUrl);
+
+    canvas.toBlob((pngBlob) => {
+      if (!pngBlob) {
+        showMessage(document.querySelector('[data-page-message]'), 'Nao foi possivel gerar PNG.', 'error');
+        return;
+      }
+
+      const pngUrl = URL.createObjectURL(pngBlob);
+      downloadUrl(pngUrl, 'dozeclin-cartao-validacao.png');
+      window.setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+    }, 'image/png');
+  } catch (error) {
+    showMessage(document.querySelector('[data-page-message]'), error.message || 'Nao foi possivel baixar PNG.', 'error');
+  }
 }
