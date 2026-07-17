@@ -40,7 +40,17 @@ Deno.serve(async (req) => {
         p_allow_download: Boolean(allowDownload),
         p_max_views: maxViews
       });
-    if (error) throw error;
+
+      if (error) {
+  console.error('CREATE_DOCUMENT_SHARE_LINK_ERROR', {
+    message: error.message,
+    details: error.details,
+    hint: error.hint,
+    code: error.code
+  });
+
+  throw error;
+}
 
     return jsonResponse({
       ...data,
