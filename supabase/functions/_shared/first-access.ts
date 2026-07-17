@@ -74,7 +74,23 @@ export async function getAuthenticatedUser(req: Request) {
   if (!token) throw new HttpError('Sessao ausente.', 401);
 
   const { data, error } = await userClient.auth.getUser(token);
-  if (error || !data.user) throw new HttpError('Sessao invalida.', 401);
+
+if (error) {
+  console.error('AUTH_GET_USER_ERROR', {
+    message: error.message,
+    status: error.status,
+    name: error.name
+  });
+
+  throw new HttpError(
+    `Sessao invalida: ${error.message}`,
+    error.status || 401
+  );
+}
+
+if (!data.user) {
+  throw new HttpError('Utilizador não encontrado.', 401);
+}
 
   return { user: data.user, serviceClient };
 }
