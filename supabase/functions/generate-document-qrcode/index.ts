@@ -19,6 +19,7 @@ Deno.serve(async (req) => {
     const { userClient, serviceClient, authHeader } = getClients(req);
 
 const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  
 
 if (!token) {
   throw new HttpError('Sessao ausente.', 401);
@@ -35,10 +36,7 @@ if (authError) {
     tokenPrefix: token.substring(0, 20)
   });
 
-  throw new HttpError(
-    `Sessao invalida: ${authError.message}`,
-    authError.status || 401
-  );
+  throw new HttpError('Sessao invalida.', 401);
 }
 
 if (!authData.user) {

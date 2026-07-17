@@ -71,28 +71,26 @@ export function getClients(req: Request) {
 export async function getAuthenticatedUser(req: Request) {
   const { userClient, serviceClient, authHeader } = getClients(req);
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  if (!token) throw new HttpError('Sessao ausente.', 401);
+  if (!token) 
+      throw new HttpError('Sessao ausente.', 401);
+}
 
-  const { data, error } = await userClient.auth.getUser(token);
+  const { data: authData, error: authError } =
+  await serviceClient.auth.getUser(token);
 
-if (error) {
+if (authError) {
   console.error('AUTH_GET_USER_ERROR', {
-    message: error.message,
-    status: error.status,
-    name: error.name
+    message: authError.message,
+    status: authError.status,
+    name: authError.name
   });
 
-  throw new HttpError(
-    `Sessao invalida: ${error.message}`,
-    error.status || 401
-  );
+  throw new HttpError('Sessao invalida.', 401);
 }
 
-if (!data.user) {
+
+if (!authData.user) {
   throw new HttpError('Utilizador não encontrado.', 401);
-}
-
-  return { user: data.user, userClient, serviceClient };
 }
 
 export async function requireDozeclinSuperAdmin(req: Request) {
