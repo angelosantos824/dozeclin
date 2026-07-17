@@ -1,5 +1,6 @@
 import { getCurrentProfile } from './auth.js';
 import { hasPermission } from './permissions.js';
+import { APP_URLS, buildAppUrl } from '../config/app-config.js';
 import { canAccessProduct } from '../services/platform.service.js';
 
 export async function requireAuth(requiredPermission = null) {
@@ -17,12 +18,12 @@ export async function requireAuth(requiredPermission = null) {
 
   if (profile.is_platform_user) {
     if (!requiredPermission) {
-      window.location.replace('plataforma.html');
+      window.location.replace(APP_URLS.platform);
       return null;
     }
 
     if (requiredPermission && !hasPermission(profile, requiredPermission)) {
-      window.location.replace('plataforma.html?erro=sem-permissao');
+      window.location.replace(buildAppUrl('plataforma.html', { erro: 'sem-permissao' }));
       return null;
     }
 
@@ -30,12 +31,12 @@ export async function requireAuth(requiredPermission = null) {
   }
 
   if (profile.must_change_password && !isCurrentPage('alterar-senha-inicial.html')) {
-    window.location.replace('alterar-senha-inicial.html');
+    window.location.replace(APP_URLS.initialPassword);
     return null;
   }
 
   if (profile.role === 'patient' && !isCurrentPage('portal-paciente.html')) {
-    window.location.replace('portal-paciente.html');
+    window.location.replace(APP_URLS.patientPortal);
     return null;
   }
 
@@ -45,14 +46,12 @@ export async function requireAuth(requiredPermission = null) {
   }
 
   if (profile.role !== 'super_admin' && profile.clinics && !['trial', 'active'].includes(profile.clinics.status)) {
-    const unavailableUrl = new URL('acesso-indisponivel.html', window.location.href);
-    unavailableUrl.searchParams.set('status', profile.clinics.status);
-    window.location.replace(unavailableUrl.toString());
+    window.location.replace(buildAppUrl('acesso-indisponivel.html', { status: profile.clinics.status }));
     return null;
   }
 
   if (requiredPermission && !hasPermission(profile, requiredPermission)) {
-    window.location.replace('dashboard.html?erro=sem-permissao');
+    window.location.replace(buildAppUrl('dashboard.html', { erro: 'sem-permissao' }));
     return null;
   }
 
@@ -72,7 +71,7 @@ export async function requirePlatformUser() {
   }
 
   if (!profile.is_platform_user || profile.status !== 'active') {
-    window.location.replace('dashboard.html?erro=sem-permissao');
+    window.location.replace(buildAppUrl('dashboard.html', { erro: 'sem-permissao' }));
     return null;
   }
 
@@ -84,7 +83,7 @@ export async function requirePlatformSuperAdmin() {
   if (!profile) return null;
 
   if (profile.role !== 'super_admin') {
-    window.location.replace('dashboard.html?erro=sem-permissao');
+    window.location.replace(buildAppUrl('dashboard.html', { erro: 'sem-permissao' }));
     return null;
   }
 
@@ -98,12 +97,12 @@ export async function requireProductAccess(productCode) {
   try {
     const allowed = await canAccessProduct(productCode);
     if (!allowed) {
-      window.location.replace('plataforma.html?erro=produto-sem-acesso');
+      window.location.replace(buildAppUrl('plataforma.html', { erro: 'produto-sem-acesso' }));
       return null;
     }
   } catch (error) {
     console.error('Falha ao validar acesso ao produto.', error);
-    window.location.replace('plataforma.html?erro=produto-indisponivel');
+    window.location.replace(buildAppUrl('plataforma.html', { erro: 'produto-indisponivel' }));
     return null;
   }
 
@@ -126,7 +125,5 @@ export async function protectPage(options = {}) {
 }
 
 function redirectToLogin(message = '') {
-  const loginUrl = new URL('login.html', window.location.href);
-  if (message) loginUrl.searchParams.set('erro', message);
-  window.location.replace(loginUrl.toString());
+  window.location.replace(buildAppUrl('login.html', { erro: message }));
 }

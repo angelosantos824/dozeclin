@@ -5,6 +5,7 @@ import {
   readJsonRequest,
   getClients
 } from '../_shared/first-access.ts';
+import { buildPublicAppUrl } from '../_shared/app-origin.ts';
 
 Deno.serve(async (req) => {
   try {
@@ -41,19 +42,11 @@ Deno.serve(async (req) => {
       });
     if (error) throw error;
 
-    const origin = resolveOrigin(req);
     return jsonResponse({
       ...data,
-      url: `${origin}${data.url}`
+      url: buildPublicAppUrl(req, data.url)
     });
   } catch (error) {
     return handleError(error, 'generate-document-share-link');
   }
 });
-
-function resolveOrigin(req: Request) {
-  const configured = Deno.env.get('APP_PUBLIC_URL');
-  if (configured) return configured.replace(/\/$/, '');
-  const origin = req.headers.get('Origin') || 'http://localhost:3000';
-  return origin.replace(/\/$/, '');
-}

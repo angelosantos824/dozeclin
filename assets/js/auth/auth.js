@@ -1,4 +1,5 @@
 import { supabase, supabaseDozedev } from '../config/supabase.js';
+import { APP_URLS } from '../config/app-config.js';
 import { normalizePlatformUser } from '../services/platform.service.js';
 
 export async function signIn(email, password) {
@@ -10,8 +11,7 @@ export async function signOut() {
 }
 
 export async function sendPasswordReset(email) {
-  const redirectTo = new URL('login.html', window.location.href).href;
-  return supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  return supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URLS.login });
 }
 
 export async function getSession() {

@@ -7,6 +7,7 @@ import {
   readJsonRequest,
   getAuthenticatedUser
 } from '../_shared/first-access.ts';
+import { buildPublicAppUrl } from '../_shared/app-origin.ts';
 
 const STAFF_ROLES = ['clinic_admin', 'reception', 'professional', 'supervisor'];
 
@@ -153,8 +154,7 @@ async function findAuthUserByEmail(serviceClient: any, email: string) {
 }
 
 function buildPortalUrl(req: Request) {
-  const origin = req.headers.get('Origin') || new URL(req.url).origin;
-  return `${origin.replace(/\/$/, '')}/app/portal-paciente.html`;
+  return buildPublicAppUrl(req, '/app/portal-paciente.html');
 }
 
 function buildWhatsAppUrl(phone: string, message: string) {

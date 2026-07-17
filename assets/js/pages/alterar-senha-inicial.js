@@ -1,4 +1,5 @@
 import { getCurrentProfile, signOut } from '../auth/auth.js';
+import { APP_URLS } from '../config/app-config.js';
 import { supabase } from '../config/supabase.js';
 import { showMessage, clearMessage } from '../ui/messages.js';
 
@@ -7,16 +8,16 @@ const form = document.querySelector('[data-initial-password-form]');
 const message = document.querySelector('[data-message]');
 
 if (!profile) {
-  window.location.replace('login.html');
+  window.location.replace(APP_URLS.login);
 } else if (profile.is_platform_user || !profile.must_change_password) {
-  window.location.replace(profile.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
+  window.location.replace(profile.role === 'patient' ? APP_URLS.patientPortal : APP_URLS.dashboard);
 }
 
 form?.addEventListener('submit', changePassword);
 document.querySelector('[data-toggle-password]')?.addEventListener('change', togglePasswordVisibility);
 document.querySelector('[data-logout]')?.addEventListener('click', async () => {
   await signOut();
-  window.location.replace('login.html');
+  window.location.replace(APP_URLS.login);
 });
 
 async function changePassword(event) {
@@ -46,7 +47,7 @@ async function changePassword(event) {
     form.password.value = '';
     form.confirm_password.value = '';
     showMessage(message, 'Senha alterada com sucesso.', 'success');
-    window.location.replace(profile.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
+    window.location.replace(profile.role === 'patient' ? APP_URLS.patientPortal : APP_URLS.dashboard);
   } catch (error) {
     console.error('Falha ao alterar senha inicial.', { message: error.message });
     showMessage(message, error.message || 'Nao foi possivel alterar a senha. Tente novamente.', 'error');

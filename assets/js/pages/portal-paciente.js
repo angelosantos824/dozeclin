@@ -1,4 +1,5 @@
 import { getCurrentProfile, signOut } from '../auth/auth.js';
+import { APP_URLS, buildAppUrl } from '../config/app-config.js';
 import {
   completePatientProfile,
   getPatientPortalContext,
@@ -28,15 +29,13 @@ let currentAnamnesisIndex = 0;
 let timezoneReturnFocus = null;
 
 if (!profile) {
-  window.location.replace('login.html');
+  window.location.replace(APP_URLS.login);
 } else if (profile.must_change_password) {
-  window.location.replace('alterar-senha-inicial.html');
+  window.location.replace(APP_URLS.initialPassword);
 } else if (profile.role !== 'patient') {
-  window.location.replace('dashboard.html');
+  window.location.replace(APP_URLS.dashboard);
 } else if (profile.clinics && !['trial', 'active'].includes(profile.clinics.status)) {
-  const unavailableUrl = new URL('acesso-indisponivel.html', window.location.href);
-  unavailableUrl.searchParams.set('status', profile.clinics.status);
-  window.location.replace(unavailableUrl.toString());
+  window.location.replace(buildAppUrl('acesso-indisponivel.html', { status: profile.clinics.status }));
 } else {
   await loadPortal();
   bindEvents();
@@ -172,7 +171,7 @@ function bindEvents() {
   document.querySelector('[data-portal-signout]')?.addEventListener('click', async (event) => {
     event.preventDefault();
     await signOut();
-    window.location.replace('login.html');
+    window.location.replace(APP_URLS.login);
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !document.querySelector('[data-timezone-modal]')?.hidden) {

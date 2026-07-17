@@ -1,4 +1,5 @@
 import { getCurrentProfile, signIn, sendPasswordReset } from '../auth/auth.js';
+import { APP_URLS } from '../config/app-config.js';
 import { isSupabaseConfigured } from '../config/supabase.js';
 import { showMessage, clearMessage } from '../ui/messages.js';
 
@@ -32,14 +33,14 @@ form?.addEventListener('submit', async (event) => {
     if (error) throw error;
     const profile = await getCurrentProfile();
     if (profile?.is_platform_user) {
-      window.location.replace('plataforma.html');
+      window.location.replace(APP_URLS.platform);
       return;
     }
     if (profile?.must_change_password) {
-      window.location.replace('alterar-senha-inicial.html');
+      window.location.replace(APP_URLS.initialPassword);
       return;
     }
-    window.location.replace(profile?.role === 'patient' ? 'portal-paciente.html' : 'dashboard.html');
+    window.location.replace(profile?.role === 'patient' ? APP_URLS.patientPortal : APP_URLS.dashboard);
   } catch (error) {
     showMessage(message, 'Acesso negado. Verifique os dados informados.', 'error');
   } finally {

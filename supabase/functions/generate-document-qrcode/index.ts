@@ -6,6 +6,7 @@ import {
   readJsonRequest,
   getClients
 } from '../_shared/first-access.ts';
+import { buildPublicAppUrl } from '../_shared/app-origin.ts';
 
 const BUCKET = 'document-assets';
 const SIGNED_URL_TTL = 60 * 10;
@@ -94,8 +95,5 @@ Deno.serve(async (req) => {
 });
 
 function buildValidationUrl(req: Request, token: string) {
-  const configured = Deno.env.get('APP_PUBLIC_URL');
-  if (configured) return `${configured.replace(/\/$/, '')}/v/${token}`;
-  const origin = req.headers.get('Origin') || 'http://localhost:3000';
-  return `${origin.replace(/\/$/, '')}/app/verificar-documento.html?token=${encodeURIComponent(token)}`;
+  return buildPublicAppUrl(req, '/app/verificar-documento.html', { token });
 }

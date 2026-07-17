@@ -1,4 +1,5 @@
 import { signOut } from '../auth/auth.js';
+import { APP_URLS } from '../config/app-config.js';
 import { APP_NAME } from '../config/constants.js';
 import { getClinicLogoSignedUrl } from '../services/clinic-settings.service.js';
 
@@ -97,7 +98,7 @@ function buildTopbar(topbar, profile) {
   logout.textContent = 'Sair';
   logout.addEventListener('click', async () => {
     await signOut();
-    window.location.replace('login.html');
+    window.location.replace(APP_URLS.login);
   });
 
   topbar.append(clinicBox, logout);
